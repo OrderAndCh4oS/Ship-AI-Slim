@@ -1,0 +1,17 @@
+
+
+{% extends 'base.twig' %}
+
+{% block title_tag %}
+    {{ parent() }} Ship AI
+{% endblock %}
+
+{% block content %}
+    <canvas id="canvas"></canvas>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="js/vector.js"></script>
+    <script src="js/shipClass.js"></script>
+    <script src="js/ship-ai.js"></script>
+{% endblock %}
