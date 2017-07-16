@@ -6,72 +6,59 @@ window.onload = function () {
         ships = [],
         deadShips = [],
         countdownInit = new Date().getTime(),
-        scores = {red: 0, green: 0, blue: 0, pink: 0, yellow: 0, cyan: 0},
-        scoresShown = false;
+        scores = scoreClass.create();
+
+    for (var i = 90; i > 0; i--) {
+        instantiateShip();
+    }
+
+    update();
+
+    function update() {
+        drawBackground();
+        showUI();
+
+        for (var i = ships.length - 1; i >= 0; i--) {
+            var ship = ships[i],
+                closestShip = {
+                    distance: false,
+                    angle: 0
+                };
+
+            for (var j = ships.length - 1; j >= 0; j--) {
+                if(containsDeadShip(i, j)) {
+                    continue;
+                }
+                if (ships[j].colour !== ship.colour) {
+                    findClosestShip(ship, closestShip, j, i);
+                    detectShipCollision(closestShip.distance, i, j);
+                }
+            }
+
+            setShipTurningSpeed(ship, closestShip.angle);
+            setShipThrusters(ship, closestShip.angle);
+
+            ship.update();
+            ship.draw(context);
+            loopShipIfLeftDrawingArea(ship);
+        }
+
+        removeDeadShips();
+
+        requestAnimationFrame(update)
+    }
 
     function isInArray(value, array) {
         return array.indexOf(value) > -1
     }
 
+    function containsDeadShip(i, j) {
+        return isInArray(i, deadShips) || isInArray(j, deadShips);
+    }
+
     function countdown() {
-        var currentCountdown = 30 - Math.round((new Date().getTime() - countdownInit) / 1000)
+        var currentCountdown = 30 - Math.round((new Date().getTime() - countdownInit) / 1000);
         return currentCountdown <= 0 ? 0 : currentCountdown;
-    }
-
-    function incrementScore(ship) {
-        switch (ship.colour) {
-            case '#ff3243':
-                scores.red++;
-                break;
-            case '#ff4fa9':
-                scores.pink++;
-                break;
-            case '#61ff83':
-                scores.green++;
-                break;
-            case '#6ddfff':
-                scores.cyan++;
-                break;
-            case '#4b6aff':
-                scores.blue++;
-                break;
-            case '#ffe76a':
-                scores.yellow++;
-                break
-        }
-    }
-
-    function displayScores() {
-        if (scoresShown) {
-            return;
-        }
-        var scoresList, title, scoresHolder, restartLink, backLink;
-        scoresShown = true;
-        scoresHolder = document.createElement('scoresHolder');
-        scoresHolder.classList.add('holder');
-        title = document.createElement('h1');
-        title.classList.add('scores-title');
-        title.innerHTML = "Final Scores";
-        scoresList = document.createElement('scoresList');
-        for (var key in scores) {
-            var li = document.createElement('li');
-            li.innerHTML = key + ": " + scores[key];
-            li.classList.add(key);
-            scoresList.appendChild(li);
-        }
-        backLink = document.createElement('a');
-        backLink.innerHTML = "Back to Menu";
-        backLink.classList.add('back-link');
-        backLink.setAttribute('href', '/');
-        restartLink = document.createElement('a');
-        restartLink.innerHTML = "Play Again";
-        restartLink.classList.add('restart-link');
-        restartLink.setAttribute('href', 'ship-ai');
-        scoresHolder.appendChild(title);
-        scoresHolder.appendChild(scoresList);
-        scoresHolder.appendChild(backLink);
-        scoresHolder.appendChild(restartLink);
-        document.body.appendChild(scoresHolder);
     }
 
     function setShipColour(ship) {
@@ -93,7 +80,7 @@ window.onload = function () {
                 break;
             case 5:
                 ship.colour = '#ffe76a';
-                break
+                break;
         }
     }
 
@@ -105,7 +92,7 @@ window.onload = function () {
         setShipColour(ship);
         ship.id = i;
         ship.angle = i % 2 === 0 ? 0 : Math.PI;
-        ships.push(ship)
+        ships.push(ship);
         return ship;
     }
 
@@ -115,14 +102,18 @@ window.onload = function () {
         context.fillRect(0, 0, width, height);
     }
 
+    function showUI() {
+        var currentCountdown = countdown();
+        displayCountdown(currentCountdown);
+        if (currentCountdown === 0 && !scores.isDisplayed) {
+            scores.displayScores();
+        }
+    }
+
     function displayCountdown(timer) {
         context.font = '20px Verdana';
         context.fillStyle = '#ff3243';
         context.fillText(timer, 30, 30);
-    }
-
-    function howClose(x, y) {
-        return Math.atan2(Math.sin(x - y), Math.cos(x - y))
     }
 
     function findClosestShip(ship, closestShip, j, i) {
@@ -138,21 +129,20 @@ window.onload = function () {
     }
 
     function detectShipCollision(distance, i, j) {
-        if (distance < 12 && i !== j && !isInArray(i, deadShips) &&
-            !isInArray(j, deadShips)) {
+        if (distance < 12 && i !== j && !isInArray(i, deadShips) && !isInArray(j, deadShips)) {
             if (Math.random >= 0.5) {
                 deadShips.push(j);
                 ships[i].kills++;
-                incrementScore(ships[i]);
+                scores.incrementScore(ships[i].colour);
             } else {
                 deadShips.push(i);
                 ships[j].kills++;
-                incrementScore(ships[j]);
+                scores.incrementScore(ships[j].colour);
             }
         }
     }
 
-    function loopShipIfLeftScreen(ship) {
+    function loopShipIfLeftDrawingArea(ship) {
         if (ship.position.getX() > width) {
             ship.position.setX(0)
         }
@@ -198,6 +188,10 @@ window.onload = function () {
         }
     }
 
+    function howClose(x, y) {
+        return Math.atan2(Math.sin(x - y), Math.cos(x - y))
+    }
+
     function setShipThrusters(ship, angleToClosest) {
         if (howClose(ship.angle, angleToClosest) <= 0.3 &&
             howClose(ship.angle, angleToClosest) >= -0.3) {
@@ -233,51 +227,6 @@ window.onload = function () {
             deadShips.pop()
         }
     }
-
-    function showUI() {
-        var currentCountdown = countdown();
-        if (currentCountdown === 0) {
-            displayScores();
-        }
-        displayCountdown(currentCountdown);
-    }
-
-    function update() {
-        drawBackground();
-        for (var i = ships.length - 1; i >= 0; i--) {
-            var ship = ships[i],
-                closestShip = {
-                    distance: false,
-                    angle: 0
-                };
-
-            for (var j = ships.length - 1; j >= 0; j--) {
-                if (ships[j].colour !== ship.colour) {
-                    findClosestShip(ship, closestShip, j, i);
-                    detectShipCollision(closestShip.distance, i, j);
-                }
-            }
-
-            setShipTurningSpeed(ship, closestShip.angle);
-            setShipThrusters(ship, closestShip.angle);
-
-            ship.update();
-            ship.draw(context);
-            loopShipIfLeftScreen(ship);
-        }
-
-        removeDeadShips();
-
-        showUI();
-
-        requestAnimationFrame(update)
-    }
-
-    for (var i = 90; i > 0; i--) {
-        var ship = instantiateShip();
-    }
-
-    update();
 };
 
 
