@@ -3,8 +3,7 @@ var scoreClass = {
     isDisplayed: false,
 
     create: function () {
-        var obj = Object.create(this);
-        return obj;
+        return Object.create(this);
     },
 
     incrementScore: function (colour) {

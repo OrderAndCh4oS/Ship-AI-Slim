@@ -5,18 +5,18 @@ window.onload = function () {
         height = canvas.height = window.innerHeight,
         ships = [],
         deadShips = [],
-        countdownInit = new Date().getTime(),
-        scores = scoreClass.create();
+        scores = scoreClass.create(),
+        UI = UIClass.create(width, height);
 
     for (var i = 90; i > 0; i--) {
-        instantiateShip();
+        instantiateShip((Math.random() * 100), (Math.random() * 100));
     }
 
     update();
 
     function update() {
-        drawBackground();
-        showUI();
+        UI.drawBackground(context);
+        UI.showUI(scores, context);
 
         for (var i = ships.length - 1; i >= 0; i--) {
             var ship = ships[i],
@@ -26,21 +26,21 @@ window.onload = function () {
                 };
 
             for (var j = ships.length - 1; j >= 0; j--) {
-                if(containsDeadShip(i, j)) {
+                if (containsDeadShip(i, j)) {
                     continue;
                 }
                 if (ships[j].colour !== ship.colour) {
-                    findClosestShip(ship, closestShip, j, i);
+                    ship.findClosestShip(ships[j], closestShip, j, i);
                     detectShipCollision(closestShip.distance, i, j);
                 }
             }
 
-            setShipTurningSpeed(ship, closestShip.angle);
-            setShipThrusters(ship, closestShip.angle);
+            ship.setShipTurningSpeed(closestShip.angle);
+            ship.setShipThrusters(closestShip.angle);
 
             ship.update();
             ship.draw(context);
-            loopShipIfLeftDrawingArea(ship);
+            ship.loopShipIfLeftDrawingArea(width, height);
         }
 
         removeDeadShips();
@@ -54,11 +54,6 @@ window.onload = function () {
 
     function containsDeadShip(i, j) {
         return isInArray(i, deadShips) || isInArray(j, deadShips);
-    }
-
-    function countdown() {
-        var currentCountdown = 30 - Math.round((new Date().getTime() - countdownInit) / 1000);
-        return currentCountdown <= 0 ? 0 : currentCountdown;
     }
 
     function setShipColour(ship) {
@@ -84,48 +79,16 @@ window.onload = function () {
         }
     }
 
-    function instantiateShip() {
+    function instantiateShip(thrusterPower, turningSpeed) {
         var ship = shipClass.create(Math.random() * (width),
-            Math.random() * (height), (Math.random() * 0.2) + 0.1,
-            (Math.random() * 0.5) + 0.5);
+            Math.random() * (height), (thrusterPower / 100) * 0.25 + 0.05,
+            (turningSpeed / 100) * 0.7 + 0.3);
         ship.friction = 0.99;
         setShipColour(ship);
         ship.id = i;
         ship.angle = i % 2 === 0 ? 0 : Math.PI;
         ships.push(ship);
         return ship;
-    }
-
-    function drawBackground() {
-        context.clearRect(0, 0, width, height);
-        context.fillStyle = '#000';
-        context.fillRect(0, 0, width, height);
-    }
-
-    function showUI() {
-        var currentCountdown = countdown();
-        displayCountdown(currentCountdown);
-        if (currentCountdown === 0 && !scores.isDisplayed) {
-            scores.displayScores();
-        }
-    }
-
-    function displayCountdown(timer) {
-        context.font = '20px Verdana';
-        context.fillStyle = '#ff3243';
-        context.fillText(timer, 30, 30);
-    }
-
-    function findClosestShip(ship, closestShip, j, i) {
-        var distance = ship.distanceTo(ships[j]);
-        if (!closestShip.distance && i !== j) {
-            closestShip.angle = ships[j].angleToPredictedLocation(ship);
-            closestShip.distance = distance
-        }
-        if (distance < closestShip.distance && i !== j) {
-            closestShip.angle = ships[j].angleToPredictedLocation(ship);
-            closestShip.distance = distance
-        }
     }
 
     function detectShipCollision(distance, i, j) {
@@ -142,91 +105,13 @@ window.onload = function () {
         }
     }
 
-    function loopShipIfLeftDrawingArea(ship) {
-        if (ship.position.getX() > width) {
-            ship.position.setX(0)
-        }
-        if (ship.position.getX() < 0) {
-            ship.position.setX(width)
-        }
-        if (ship.position.getY() > height) {
-            ship.position.setY(0)
-        }
-        if (ship.position.getY() < 0) {
-            ship.position.setY(height)
-        }
-    }
-
-    function setShipTurningSpeed(ship, angleToClosest) {
-        switch (true) {
-            case (howClose(ship.angle, angleToClosest) >= 0.6):
-                ship.turnLeft(ship.turningSpeed * 0.1);
-                break;
-            case (howClose(ship.angle, angleToClosest) >= 0.4):
-                ship.turnLeft(ship.turningSpeed * 0.1 / 3 * 2);
-                break;
-            case (howClose(ship.angle, angleToClosest) >= 0.2):
-                ship.turnLeft(ship.turningSpeed * 0.1 / 3);
-                break;
-            case (howClose(ship.angle, angleToClosest) > 0):
-                ship.turnLeft(howClose(ship.angle, angleToClosest));
-                break;
-            case (howClose(ship.angle, angleToClosest) <= -0.6):
-                ship.turnRight(ship.turningSpeed * 0.1);
-                break;
-            case (howClose(ship.angle, angleToClosest) <= -0.4):
-                ship.turnRight(ship.turningSpeed * 0.1 / 3 * 2);
-                break;
-            case (howClose(ship.angle, angleToClosest) <= -0.2):
-                ship.turnRight(ship.turningSpeed * 0.1 / 3);
-                break;
-            case (howClose(ship.angle, angleToClosest) < 0):
-                ship.turnRight(howClose(ship.angle, angleToClosest));
-                break;
-            default:
-                ship.stopTurning()
-        }
-    }
-
-    function howClose(x, y) {
-        return Math.atan2(Math.sin(x - y), Math.cos(x - y))
-    }
-
-    function setShipThrusters(ship, angleToClosest) {
-        if (howClose(ship.angle, angleToClosest) <= 0.3 &&
-            howClose(ship.angle, angleToClosest) >= -0.3) {
-            ship.startThrusting(0.5)
-        } else if (howClose(ship.angle, angleToClosest) <= 0.15 &&
-            howClose(ship.angle, angleToClosest) >= -0.15) {
-            ship.startThrusting(0.8)
-        } else if (howClose(ship.angle, angleToClosest) <= 0.1 &&
-            howClose(ship.angle, angleToClosest) >= -0.1) {
-            ship.startThrusting(1)
-        } else {
-            ship.stopThrusting()
-        }
-    }
-
-    function drawExplosion(index) {
-        context.save();
-        context.translate(ships[index].position.getX(),
-            ships[index].position.getY());
-        context.beginPath();
-        context.arc(0, 0, 20, 0, 2 * Math.PI);
-        context.fillStyle = '#ff6b1b';
-        context.fill();
-        context.restore();
-    }
-
     function removeDeadShips() {
         deadShips.sort();
         for (var k = deadShips.length - 1; k >= 0; k--) {
             var index = deadShips[k];
-            drawExplosion(index);
+            ships[index].drawExplosion(context);
             ships.splice(index, 1);
             deadShips.pop()
         }
     }
 };
-
-
