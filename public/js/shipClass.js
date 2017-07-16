@@ -59,6 +59,7 @@ var shipClass = {
     },
 
     draw: function (context) {
+        context.save();
         context.translate(this.position.getX(), this.position.getY());
         context.rotate(this.angle);
         context.beginPath();
@@ -78,6 +79,7 @@ var shipClass = {
         context.fillText(this.kills, -12, -12);
         context.fillStyle = "#000";
         context.fillText(this.id, -7, 5);
+        context.restore();
     },
 
     angleTo: function (p2) {
