@@ -12,8 +12,8 @@ namespace Oacc\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="Repository\ShipRepository")
- * @ORM\Table(name="photos", uniqueConstraints={@ORM\UniqueConstraint(name="photo_slug", columns={"slug"})}))
+ * @ORM\Entity(repositoryClass="Oacc\Repository\ShipRepository")
+ * @ORM\Table(name="ship")
  */
 class Ship
 {
@@ -24,16 +24,20 @@ class Ship
      */
     private $id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Oacc\Entity\Team", inversedBy="ships")
+     */
+    private $team;
 
     /**
-     * @ORM\Column(type="string", length="13")
+     * @ORM\Column(type="string", length=13)
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $thursterPower;
+    private $thrusterPower;
 
     /**
      * @ORM\Column(type="integer")
@@ -41,7 +45,74 @@ class Ship
     private $turningSpeed;
 
     /**
-     * @ORM\Column
+     * @return mixed
      */
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    /**
+     * @param mixed $team
+     */
+    public function setTeam($team)
+    {
+        $this->team = $team;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getThrusterPower()
+    {
+        return $this->thrusterPower;
+    }
+
+    /**
+     * @param mixed $thrusterPower
+     */
+    public function setThrusterPower($thrusterPower)
+    {
+        $this->thrusterPower = $thrusterPower;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTurningSpeed()
+    {
+        return $this->turningSpeed;
+    }
+
+    /**
+     * @param mixed $turningSpeed
+     */
+    public function setTurningSpeed($turningSpeed)
+    {
+        $this->turningSpeed = $turningSpeed;
+    }
 }
