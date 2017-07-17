@@ -37,12 +37,14 @@ class Ship
     /**
      * @ORM\Column(type="integer")
      */
-    private $thrusterPower;
+    private $thrusterPower = 0;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $turningSpeed;
+    private $turningSpeed = 0;
+
+    private $kills = 0;
 
     /**
      * @return mixed
@@ -114,5 +116,21 @@ class Ship
     public function setTurningSpeed($turningSpeed)
     {
         $this->turningSpeed = $turningSpeed;
+    }
+
+    /**
+     * @return int
+     */
+    public function getKills()
+    {
+        return $this->kills;
+    }
+
+    /**
+     * @param int $kills
+     */
+    public function setKills($kills)
+    {
+        $this->kills = $kills;
     }
 }

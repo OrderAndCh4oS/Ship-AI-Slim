@@ -1,0 +1,15 @@
+{% extends 'base.twig' %}
+
+{% block title_tag %}
+    {{ parent() }} Manage Squadrons
+{% endblock %}
+
+{% block content %}
+        <h1 class="title cyan">Manage Squadrons</h1>
+        <form method="post" action="{{ path_for('manage-squadron') }}">
+            <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+            <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
+            <input type="text" name="name" value="" placeholder="Team Name" title="Team Name">
+            <input type="submit" value="Create Team">
+        </form>
+{% endblock %}

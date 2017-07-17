@@ -5,13 +5,11 @@ use Slim\Container;
 
 $container = $app->getContainer();
 
-// monolog
 $container['logger'] = function (Container $container) {
     $settings = $container->get('settings')['logger'];
     $logger = new Monolog\Logger($settings['name']);
     $logger->pushProcessor(new Monolog\Processor\UidProcessor());
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
-
     return $logger;
 };
 
@@ -36,6 +34,10 @@ $container['view'] = function (Container $container) {
     $view->addExtension(new Slim\Views\TwigExtension($container['router'], $basePath));
 
     return $view;
+};
+
+$container['csrf'] = function ($c) {
+    return new \Slim\Csrf\Guard;
 };
 
 $container['doctrine'] = function (Container $container) {

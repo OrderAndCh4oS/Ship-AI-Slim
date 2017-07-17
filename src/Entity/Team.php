@@ -9,10 +9,11 @@
 namespace Oacc\Entity;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="TeamRepository")
+ * @ORM\Entity(repositoryClass="Oacc\Repository\TeamRepository")
  * @ORM\Table(name="team")
  */
 class Team
@@ -30,9 +31,19 @@ class Team
     private $name;
 
     /**
+     * @ORM\Cash(type="integer")
+     */
+    private $cash = 100;
+
+    /**
      * @ORM\OneToMany(targetEntity="Oacc\Entity\Ship", mappedBy="team", orphanRemoval=true)
      */
     private $ships;
+
+    public function __construct()
+    {
+        $this->ships = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -56,6 +67,22 @@ class Team
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCash()
+    {
+        return $this->cash;
+    }
+
+    /**
+     * @param mixed $cash
+     */
+    public function setCash($cash)
+    {
+        $this->cash = $cash;
     }
 
     /**

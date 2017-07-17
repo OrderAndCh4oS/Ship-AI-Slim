@@ -57,6 +57,15 @@ a:hover, a:active, a:focus {
     background-color: #ff3243;
 }
 
+.manage-squadron-button,
+.manage-squadron-button:visited {
+    background-color: #6ddfff;
+}
+
+.manage-squadron-button:hover, .manage-squadron-button:active, .manage-squadron-button:focus {
+    background-color: #4b6aff;
+}
+
 .back-link, .restart-link {
     padding: 12px;
     font-size: 30px;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oacc\Entity;
+namespace Oacc\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
