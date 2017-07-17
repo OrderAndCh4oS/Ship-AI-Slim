@@ -1,18 +1,11 @@
 <?php
 // Routes
 
+use Oacc\Controller\MenuController;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-$app->get(
-    '/',
-    function (Request $request, Response $response, $args) {
-        return $this->view->render(
-            $response,
-            'index.twig'
-        );
-    }
-)->setName('menu');
+$app->get('/', MenuController::class)->setName('menu');
 
 $app->map(
     ['post', 'get'],

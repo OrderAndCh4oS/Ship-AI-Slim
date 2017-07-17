@@ -36,8 +36,12 @@ $container['view'] = function (Container $container) {
     return $view;
 };
 
-$container['csrf'] = function ($c) {
+$container['csrf'] = function () {
     return new \Slim\Csrf\Guard;
+};
+
+$container['Oacc\Controller\MenuController'] = function (Container $container) {
+    return new Oacc\Controller\MenuController($container->get('view'));
 };
 
 $container['doctrine'] = function (Container $container) {
