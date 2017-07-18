@@ -27,4 +27,11 @@ class MenuController
             'index.twig'
         );
     }
+
+    public function indexAction(Request $request, Response $response, $args = []) {
+        return $this->view->render(
+            $response,
+            'index.twig'
+        );
+    }
 }

@@ -2,6 +2,7 @@
 // DIC configuration
 
 use Slim\Container;
+use Slim\Csrf\Guard;
 
 $container = $app->getContainer();
 
@@ -37,11 +38,23 @@ $container['view'] = function (Container $container) {
 };
 
 $container['csrf'] = function () {
-    return new \Slim\Csrf\Guard;
+    return new Guard;
 };
 
 $container['Oacc\Controller\MenuController'] = function (Container $container) {
     return new Oacc\Controller\MenuController($container->get('view'));
+};
+
+$container['Oacc\Controller\ShipController'] = function (Container $container) {
+    return new Oacc\Controller\ShipController($container->get('view'));
+};
+
+$container['Oacc\Controller\TeamController'] = function (Container $container) {
+    return new Oacc\Controller\TeamController($container->get('view'), $container->get('csrf'));
+};
+
+$container['Oacc\Controller\GameController'] = function (Container $container) {
+    return new Oacc\Controller\GameController($container->get('view'), $container->get('csrf'));
 };
 
 $container['doctrine'] = function (Container $container) {
