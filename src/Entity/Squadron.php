@@ -13,10 +13,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="Oacc\Repository\TeamRepository")
- * @ORM\Table(name="team")
+ * @ORM\Entity(repositoryClass="Oacc\Repository\SquadronRepository")
+ * @ORM\Table(name="squadron")
  */
-class Team
+class Squadron
 {
     /**
      * @ORM\Id
@@ -31,18 +31,18 @@ class Team
     private $name;
 
     /**
-     * @ORM\Cash(type="integer")
+     * @ORM\Column(type="integer")
      */
     private $cash = 100;
 
     /**
-     * @ORM\OneToMany(targetEntity="Oacc\Entity\Ship", mappedBy="team", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Oacc\Entity\Drone", mappedBy="squadron", orphanRemoval=true)
      */
-    private $ships;
+    private $drones;
 
     public function __construct()
     {
-        $this->ships = new ArrayCollection();
+        $this->drones = new ArrayCollection();
     }
 
     /**
@@ -88,16 +88,16 @@ class Team
     /**
      * @return mixed
      */
-    public function getShips()
+    public function getDrones()
     {
-        return $this->ships;
+        return $this->drones;
     }
 
     /**
-     * @param mixed $ships
+     * @param mixed $drones
      */
-    public function setShips($ships)
+    public function setDrones($drones)
     {
-        $this->ships = $ships;
+        $this->drones = $drones;
     }
 }

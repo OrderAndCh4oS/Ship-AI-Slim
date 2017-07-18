@@ -12,10 +12,10 @@ namespace Oacc\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="Oacc\Repository\ShipRepository")
- * @ORM\Table(name="ship")
+ * @ORM\Entity(repositoryClass="Oacc\Repository\DroneRepository")
+ * @ORM\Table(name="drone")
  */
-class Ship
+class Drone
 {
     /**
      * @ORM\Id
@@ -25,9 +25,9 @@ class Ship
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Oacc\Entity\Team", inversedBy="ships")
+     * @ORM\ManyToOne(targetEntity="Oacc\Entity\Squadron", inversedBy="drones")
      */
-    private $team;
+    private $squadron;
 
     /**
      * @ORM\Column(type="string", length=13)
@@ -37,12 +37,12 @@ class Ship
     /**
      * @ORM\Column(type="integer")
      */
-    private $thrusterPower = 0;
+    private $thrusterPower = 5;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $turningSpeed = 0;
+    private $turningSpeed = 5;
 
     private $kills = 0;
 
@@ -57,17 +57,17 @@ class Ship
     /**
      * @return mixed
      */
-    public function getTeam()
+    public function getSquadron()
     {
-        return $this->team;
+        return $this->squadron;
     }
 
     /**
-     * @param mixed $team
+     * @param mixed $squadron
      */
-    public function setTeam($team)
+    public function setSquadron($squadron)
     {
-        $this->team = $team;
+        $this->squadron = $squadron;
     }
 
     /**

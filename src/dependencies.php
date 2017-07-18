@@ -45,12 +45,12 @@ $container['Oacc\Controller\MenuController'] = function (Container $container) {
     return new Oacc\Controller\MenuController($container->get('view'));
 };
 
-$container['Oacc\Controller\ShipController'] = function (Container $container) {
-    return new Oacc\Controller\ShipController($container->get('view'));
+$container['Oacc\Controller\DroneController'] = function (Container $container) {
+    return new Oacc\Controller\DroneController($container->get('view'), $container->get('csrf'), $container->get('em'));
 };
 
-$container['Oacc\Controller\TeamController'] = function (Container $container) {
-    return new Oacc\Controller\TeamController($container->get('view'), $container->get('csrf'));
+$container['Oacc\Controller\SquadronController'] = function (Container $container) {
+    return new Oacc\Controller\SquadronController($container->get('view'), $container->get('csrf'), $container->get('em'));
 };
 
 $container['Oacc\Controller\GameController'] = function (Container $container) {
