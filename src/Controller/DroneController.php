@@ -45,14 +45,22 @@ class DroneController
         $this->csrf = $csrf;
     }
 
+
     /**
      * @param Request $request
      * @param Response $response
      * @param $args
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function manageDronesAction(Request $request, Response $response, $args) {
-
+    public function manageDronesAction(Request $request, Response $response, $args)
+    {
+        return $this->view->render(
+            $response,
+            'manage-drone.twig',
+            [
+                'id' => $args['id'],
+            ]
+        );
     }
-
 }
 
