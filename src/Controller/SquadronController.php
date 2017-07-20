@@ -78,7 +78,7 @@ class SquadronController
         $name = $request->getAttribute($nameKey);
         $value = $request->getAttribute($valueKey);
 
-        $teams = $this->em->getRepository('Oacc\Entity\Squadron')->findAll();
+        $squadrons = $this->em->getRepository('Oacc\Entity\Squadron')->findAll();
 
         return $this->view->render(
             $response,
@@ -88,7 +88,7 @@ class SquadronController
                 'valueKey' => $valueKey,
                 'name' => $name,
                 'value' => $value,
-                'teams' => $teams
+                'squadrons' => $squadrons
             ]
         );
     }

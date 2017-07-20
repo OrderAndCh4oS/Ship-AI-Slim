@@ -45,7 +45,6 @@ class DroneController
         $this->csrf = $csrf;
     }
 
-
     /**
      * @param Request $request
      * @param Response $response
@@ -54,11 +53,13 @@ class DroneController
      */
     public function manageDronesAction(Request $request, Response $response, $args)
     {
+        $squadron = $this->em->getRepository('Oacc\Entity\Squadron')->findBy(['id' => $args['id']]);
+        $drones = $this->em->getRepository('Oacc\Entity\Drone')->findBy(['squadron' => $squadron]);
         return $this->view->render(
             $response,
-            'manage-drone.twig',
+            'manage-drones.twig',
             [
-                'id' => $args['id'],
+                'drones' => $drones,
             ]
         );
     }

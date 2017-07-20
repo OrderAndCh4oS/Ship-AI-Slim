@@ -12,7 +12,7 @@
         <input type="text" name="name" value="" placeholder="Team Name" title="Team Name">
         <input type="submit" value="Create Team">
     </form>
-    {% for team in teams %}
-        <a href="{{ path_for('manage-drones', { 'id': team.id }) }}"{{ team.name }}
+    {% for squadron in squadrons %}
+        <p><a href="{{ path_for('manage-drones', { 'id': squadron.id }) }}">{{ squadron.name }}</a></p>
     {% endfor %}
 {% endblock %}

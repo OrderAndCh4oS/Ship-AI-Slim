@@ -5,5 +5,19 @@
 {% endblock %}
 
 {% block content %}
-        <h1 class="title cyan">Squadron name: {{ squadron.name }}</h1>
+    <h1 class="title cyan">Squadron name: {{ drones[0].squadron.name }}</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Thruster Power</th>
+            <th>Turning Speed</th>
+        </tr>
+        {% for drone in drones %}
+            <tr>
+                <td>{{ drone.name }}</td>
+                <td>{{ drone.thrusterPower }}</td>
+                <td>{{ drone.turningSpeed }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
