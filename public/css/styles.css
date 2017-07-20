@@ -1,6 +1,9 @@
+@import "../webfonts/grafista-regular.css";
+
 html,
 body {
     margin: 0;
+    font-family: 'Grafista-Regular', "Droid Sans Mono Dotted", monospace;
 }
 
 canvas {
@@ -30,6 +33,7 @@ a, a:visited {
     text-decoration: none;
     background-color: #ff3243;
     padding: 20px;
+    display: inline-block;
 }
 
 a:hover, a:active, a:focus {
@@ -49,21 +53,25 @@ a:hover, a:active, a:focus {
 
 .play-button,
 .play-button:visited {
-    background-color: #61ff83;
+    background-color: #ff3243;
     font-size: 50px;
+    border: 1px solid #ff3243;
 }
 
 .play-button:hover, .play-button:active, .play-button:focus {
-    background-color: #ff3243;
+    color: #ff3243;
+    background-color: transparent;
 }
 
 .manage-squadron-button,
 .manage-squadron-button:visited {
-    background-color: #6ddfff;
+    background-color: #61ff83;
+    border: 1px solid #61ff83;
 }
 
 .manage-squadron-button:hover, .manage-squadron-button:active, .manage-squadron-button:focus {
-    background-color: #4b6aff;
+    background-color: transparent;
+    color: #61ff83;
 }
 
 .back-link, .restart-link {
@@ -86,6 +94,35 @@ a:hover, a:active, a:focus {
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
+}
+
+table {
+    margin: 0 auto;
+    color: #61ff83;
+    border: 1px solid #61ff83;
+    border-collapse: collapse;
+}
+
+td {
+    border: 1px solid #61ff83;
+    padding: 4px;
+}
+
+input {
+    background-color: transparent;
+    border: 1px solid #61ff83;
+    padding: 8px;
+}
+
+input[type="submit"] {
+    background-color: #61ff83;
+    border: 1px solid #61ff83;
+    color: #000;
+}
+
+input[type="submit"]:hover {
+    background-color: #ff3243;
+    border: 1px solid #ff3243;
 }
 
 .red {

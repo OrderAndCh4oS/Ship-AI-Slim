@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="title cyan">Squadron name: {{ drones[0].squadron.name }}</h1>
+    <h1 class="title green">Squadron name: {{ drones[0].squadron.name }}</h1>
     <table>
         <tr>
             <th>Name</th>
@@ -20,4 +20,7 @@
             </tr>
         {% endfor %}
     </table>
+    <p>
+        <a href="{{ path_for('manage-squadron') }}">Back</a>
+    </p>
 {% endblock %}
