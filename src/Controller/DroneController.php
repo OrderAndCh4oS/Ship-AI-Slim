@@ -10,6 +10,7 @@ namespace Oacc\Controller;
 
 
 use Doctrine\ORM\EntityManager;
+use Oacc\Entity\Drone;
 use Slim\Csrf\Guard;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -53,11 +54,20 @@ class DroneController
      */
     public function manageDronesAction(Request $request, Response $response, $args)
     {
-
+        $message = "";
         if ($request->isPost()) {
-            $body = $response->getBody();
-            $body->write('Hello');
-            return $response;
+            $drone_id = $request->getParam('id');
+            $drone_thruster_power = $request->getParam('thruster_power');
+            $drone_turning_speed = $request->getParam('turning_speed');
+            /**
+             * @var Drone $drone
+             */
+            $drone = $this->em->getRepository('Oacc\Entity\Drone')->find($drone_id);
+            $drone->setThrusterPower($drone_thruster_power);
+            $drone->setTurningSpeed($drone_turning_speed);
+            $this->em->persist($drone);
+            $this->em->flush();
+            $message = "Saved";
         }
 
         $squadron = $this->em->getRepository('Oacc\Entity\Squadron')->findBy(['id' => $args['id']]);
@@ -77,6 +87,7 @@ class DroneController
                 'valueKey' => $valueKey,
                 'name' => $name,
                 'value' => $value,
+                'message' => $message
             ]
         );
     }

@@ -6,25 +6,36 @@
 
 {% block content %}
     <h1 class="title green">Squadron name: {{ drones[0].squadron.name }}</h1>
-    <form action="{{ path_for('manage-drones', {'id': drones[0].squadron.id}) }}" method="post">
-        <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
-        <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
-        <table>
+    <h2 class="red">{{ message }}</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Thruster Power</th>
+            <th>Turning Speed</th>
+            <th>Save</th>
+        </tr>
+        {% for drone in drones %}
             <tr>
-                <th>Name</th>
-                <th>Thruster Power</th>
-                <th>Turning Speed</th>
+                <td>
+                    <input form="drone-{{ drone.id }}" name="name" title="Name" value="{{ drone.name }}">
+                </td>
+                <td>
+                    <input form="drone-{{ drone.id }}" name="thruster_power" type="number" title="Thruster Power" value="{{ drone.thrusterPower }}" min="0" max="100" step="1">
+                </td>
+                <td>
+                    <input form="drone-{{ drone.id }}" name="turning_speed" type="number" title="Turning Speed" value="{{ drone.turningSpeed }}" min="0" max="100" step="1">
+                </td>
+                <td>
+                    <form action="{{ path_for('manage-drones', {'id': drones[0].squadron.id}) }}" method="post" id="drone-{{ drone.id }}">
+                        <input type="hidden" name="id" value="{{ drone.id }}">
+                        <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+                        <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
+                        <input type="submit" name="submit" id="submit" value="Submit">
+                    </form>
+                </td>
             </tr>
-            {% for drone in drones %}
-                <tr>
-                    <td><input name="name[]" title="Name" value="{{ drone.name }}"></td>
-                    <td><input name="thruster_power[]" type="number" title="Thruster Power" value="{{ drone.thrusterPower }}" min="0" max="100" step="1"></td>
-                    <td><input name="turning_speed[]" title="Turning Speed" value="{{ drone.turningSpeed }}" min="0" max="100" step="1"></td>
-                </tr>
-            {% endfor %}
-        </table>
-        <input type="submit" name="submit" id="submit">
-    </form>
+        {% endfor %}
+    </table>
     <p>
         <a href="{{ path_for('manage-squadron') }}">Back</a>
     </p>
