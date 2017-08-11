@@ -24,10 +24,6 @@ class Drone
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Oacc\Entity\Squadron", inversedBy="drones")
-     */
-    private $squadron;
 
     /**
      * @ORM\Column(type="string", length=13)
@@ -45,6 +41,11 @@ class Drone
     private $turningSpeed = 5;
 
     private $kills = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Oacc\Entity\Squadron", inversedBy="drones")
+     */
+    private $squadron;
 
     /**
      * @return mixed

@@ -112,6 +112,7 @@ input {
     background-color: transparent;
     border: 1px solid #61ff83;
     padding: 8px;
+    color: #61ff83;
 }
 
 input[type="submit"] {
@@ -123,6 +124,7 @@ input[type="submit"] {
 input[type="submit"]:hover {
     background-color: #ff3243;
     border: 1px solid #ff3243;
+    cursor: pointer;
 }
 
 .red {

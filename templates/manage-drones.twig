@@ -6,20 +6,25 @@
 
 {% block content %}
     <h1 class="title green">Squadron name: {{ drones[0].squadron.name }}</h1>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Thruster Power</th>
-            <th>Turning Speed</th>
-        </tr>
-        {% for drone in drones %}
+    <form action="{{ path_for('manage-drones', {'id': drones[0].squadron.id}) }}" method="post">
+        <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+        <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
+        <table>
             <tr>
-                <td>{{ drone.name }}</td>
-                <td>{{ drone.thrusterPower }}</td>
-                <td>{{ drone.turningSpeed }}</td>
+                <th>Name</th>
+                <th>Thruster Power</th>
+                <th>Turning Speed</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for drone in drones %}
+                <tr>
+                    <td><input name="name[]" title="Name" value="{{ drone.name }}"></td>
+                    <td><input name="thruster_power[]" type="number" title="Thruster Power" value="{{ drone.thrusterPower }}" min="0" max="100" step="1"></td>
+                    <td><input name="turning_speed[]" title="Turning Speed" value="{{ drone.turningSpeed }}" min="0" max="100" step="1"></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <input type="submit" name="submit" id="submit">
+    </form>
     <p>
         <a href="{{ path_for('manage-squadron') }}">Back</a>
     </p>

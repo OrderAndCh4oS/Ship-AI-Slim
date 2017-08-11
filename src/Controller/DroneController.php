@@ -53,13 +53,30 @@ class DroneController
      */
     public function manageDronesAction(Request $request, Response $response, $args)
     {
+
+        if ($request->isPost()) {
+            $body = $response->getBody();
+            $body->write('Hello');
+            return $response;
+        }
+
         $squadron = $this->em->getRepository('Oacc\Entity\Squadron')->findBy(['id' => $args['id']]);
         $drones = $this->em->getRepository('Oacc\Entity\Drone')->findBy(['squadron' => $squadron]);
+
+        $nameKey = $this->csrf->getTokenNameKey();
+        $valueKey = $this->csrf->getTokenValueKey();
+        $name = $request->getAttribute($nameKey);
+        $value = $request->getAttribute($valueKey);
+
         return $this->view->render(
             $response,
             'manage-drones.twig',
             [
                 'drones' => $drones,
+                'nameKey' => $nameKey,
+                'valueKey' => $valueKey,
+                'name' => $name,
+                'value' => $value,
             ]
         );
     }
