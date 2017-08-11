@@ -43,7 +43,7 @@ $container['csrf'] = function () {
 };
 
 $container['Oacc\Controller\MenuController'] = function (Container $container) {
-    return new Oacc\Controller\MenuController($container->get('view'));
+    return new Oacc\Controller\MenuController($container->get('view'), $container->get('csrf'), $container->get('em'));
 };
 
 $container['Oacc\Controller\DroneController'] = function (Container $container) {
@@ -55,7 +55,7 @@ $container['Oacc\Controller\SquadronController'] = function (Container $containe
 };
 
 $container['Oacc\Controller\GameController'] = function (Container $container) {
-    return new Oacc\Controller\GameController($container->get('view'), $container->get('csrf'));
+    return new Oacc\Controller\GameController($container->get('view'), $container->get('csrf'), $container->get('em'));
 };
 
 $container['em'] = function (Container $container) {

@@ -70,7 +70,7 @@ class DroneController
             $message = "Saved";
         }
 
-        $squadron = $this->em->getRepository('Oacc\Entity\Squadron')->findBy(['id' => $args['id']]);
+        $squadron = $this->em->getRepository('Oacc\Entity\Squadron')->findOneBy(['id' => $args['id']]);
         $drones = $this->em->getRepository('Oacc\Entity\Drone')->findBy(['squadron' => $squadron]);
 
         $nameKey = $this->csrf->getTokenNameKey();

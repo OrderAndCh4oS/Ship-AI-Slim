@@ -1,0 +1,25 @@
+{% extends 'base.twig' %}
+
+{% block title_tag %}
+    {{ parent() }} Select Squadrons
+{% endblock %}
+
+{% block content %}
+    <h1 class="title green">Select Squadrons</h1>
+    <form action="{{ path_for('ship-ai') }}" method="post">
+        <label for="team-one">Team One</label>
+        <select id="team-one">
+            {% for squadron in squadrons %}
+                <option value="{{ squadron.id }}">{{ squadron.name }}</option>
+            {% endfor %}
+        </select>
+        <label for="team-two">Team Two</label>
+        <select id="team-two">
+            {% for squadron in squadrons %}
+                <option value="{{ squadron.id }}">{{ squadron.name }}</option>
+            {% endfor %}
+        </select> <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+        <input type="hidden" name="{{ valueKey }}" value="{{ value }}"> <input type="submit" value="Submit" id="submit">
+    </form>
+    <p><a href="{{ path_for('menu') }}">Back</a></p>
+{% endblock %}
