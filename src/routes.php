@@ -12,3 +12,8 @@ $app->map(['post', 'get'], '/manage-drones/{id}','Oacc\Controller\DroneControlle
 
 $app->get('/select-squadrons', 'Oacc\Controller\MenuController:selectSquadronsAction')->setName('select-squadron');
 $app->post('/ship-ai', 'Oacc\Controller\GameController:gameAction')->setName('ship-ai');
+
+$app->group('/api/v1', function() {
+    $this->get('/drone/{id}', 'Oacc\Controller\API\V1\DroneController:getAction');
+    $this->post('/drone/{id}', 'Oacc\Controller\API\V1\DroneController:postAction');
+});
