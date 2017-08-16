@@ -66,18 +66,17 @@ class DroneController
                     'kills'          => $drone->getKills()
                 ]
             ]);
-            $response->withStatus(200);
             $response->getBody()->write($json);
+            return $response->withStatus(200);
+
         } else {
             $json = json_encode([
                 'status' => 'error',
                 'message' => 'Not Found'
             ]);
-            $response->withStatus(404);
             $response->getBody()->write($json);
+            return $response->withStatus(404);
         }
-
-        return $response;
     }
 
     public function postAction(Request $request, Response $response, $args)
