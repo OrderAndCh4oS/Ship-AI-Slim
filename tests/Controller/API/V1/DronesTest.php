@@ -13,22 +13,8 @@ use GuzzleHttp;
 
 class DronesTest extends BaseAPITest
 {
-    public function testGET()
-    {
-        $response = $this->client->get('/api/v1/drones');
-        $json = json_decode($response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertObjectHasAttribute('status', $json);
-        $this->assertEquals('success', $json->status);
-        $this->assertObjectHasAttribute('data', $json);
-        $this->assertObjectHasAttribute('id', $json->data);
-        $this->assertObjectHasAttribute('name', $json->data);
-        $this->assertObjectHasAttribute('thruster_power', $json->data);
-        $this->assertObjectHasAttribute('turning_speed', $json->data);
-        $this->assertObjectHasAttribute('kills', $json->data);
-    }
 
-    public function testGETOne()
+    public function testGET()
     {
         $response = $this->client->get('/api/v1/drones/1');
         $json = json_decode($response->getBody());
@@ -79,7 +65,8 @@ class DronesTest extends BaseAPITest
         ];
 
         $response = $this->client->post('/api/v1/drones',[
-            'body' => json_encode($data)
+            'body'        => json_encode($data),
+            'http_errors' => false
         ]);
 
         $json = json_decode($response->getBody());

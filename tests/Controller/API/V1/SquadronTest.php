@@ -43,7 +43,7 @@ class SquadronTest extends BaseAPITest
         ];
 
         $response = $this->client->post('/api/v1/squadrons',[
-            'body' => json_encode($data)
+            'body' => json_encode($data),
         ]);
         $json = json_decode($response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
@@ -60,7 +60,8 @@ class SquadronTest extends BaseAPITest
         ];
 
         $response = $this->client->post('/api/v1/squadrons',[
-            'body' => json_encode($data)
+            'body'        => json_encode($data),
+            'http_errors' => false
         ]);
 
         $json = json_decode($response->getBody());

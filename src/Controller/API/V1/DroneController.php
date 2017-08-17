@@ -15,7 +15,7 @@ use Slim\Csrf\Guard;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class DroneController
+class DroneController extends BaseAPIController
 {
 
     /**
@@ -72,7 +72,9 @@ class DroneController
         } else {
             $json = json_encode([
                 'status' => 'error',
-                'message' => 'Not Found'
+                'errors' => [
+                    'message' => "Drone not found"
+                ]
             ]);
             $response->getBody()->write($json);
             return $response->withStatus(404);
@@ -81,7 +83,50 @@ class DroneController
 
     public function postAction(Request $request, Response $response, $args)
     {
-        return $response->getBody()->write("posted, I guess? ");
+        $post   = json_decode($request->getBody(), true);
+        $errors = [];
+
+        if ( ! array_key_exists('squadron_id', $post)) {
+            $errors[] = ['message' => 'JSON missing the squadron_id key'];
+        }
+        if ( ! array_key_exists('name', $post)) {
+            $errors[] = ['message' => 'JSON missing the name key'];
+        }
+        if (empty($post['name'])) {
+            $errors[] = ['message' => 'Name must not be empty'];
+        }
+        if ( ! empty($errors)) {
+            return $this->setErrorJson($response, $errors);
+        }
+
+        $squadronRepository = $this->em->getRepository('Oacc\Entity\Squadron');
+        $squadron           = $squadronRepository->find($post['squadron_id']);
+
+        if ( ! $squadron) {
+            $errors[] = ['message' => 'Squadron was not found'];
+
+            return $this->setErrorJson($response, $errors);
+        }
+
+        $drone = new Drone();
+
+        $drone->setName($post['name']);
+        $drone->setSquadron($squadron);
+        $this->em->persist($drone);
+        $this->em->flush();
+
+        $json = json_encode(
+            [
+                'status' => 'success',
+                'data'   => [
+                    'message' => 'Drone has been created',
+                ],
+            ]
+        );
+
+        $response->getBody()->write($json);
+
+        return $response->withStatus(200);
     }
 
     public function putAction(Request $request, Response $response, $args)

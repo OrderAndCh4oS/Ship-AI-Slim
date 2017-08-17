@@ -15,7 +15,7 @@ use Slim\Csrf\Guard;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class SquadronController
+class SquadronController extends BaseAPIController
 {
 
     /**
@@ -91,7 +91,9 @@ class SquadronController
             $json = json_encode(
                 [
                     'status' => 'error',
-                    'message' => 'Not Found',
+                    'errors' => [
+                        'message' => "Squadron not found"
+                    ]
                 ]
             );
             $response->getBody()->write($json);
@@ -102,16 +104,55 @@ class SquadronController
 
     public function postAction(Request $request, Response $response, $args)
     {
-        return $response->getBody()->write("posted, I guess? ");
+        $post = json_decode($request->getBody(), true);
+
+        $errors = [];
+
+        if ( ! array_key_exists('name', $post)) {
+            $errors[] = ['message' => 'JSON missing the name key'];
+        }
+
+        if (empty($post['name'])) {
+            $errors[] = ['message' => 'Name must not be empty'];
+        }
+
+        if ( ! empty($errors)) {
+            return $this->setErrorJson($response, $errors);
+        }
+
+        $squadron = new Squadron();
+
+        $squadron->setName($post['name']);
+        for ($i = 1; $i <= 10; $i++) {
+            $drone = new Drone;
+            $drone->setName('Drone ' . $i);
+            $drone->setSquadron($squadron);
+            $this->em->persist($drone);
+        }
+        $this->em->persist($squadron);
+        $this->em->flush();
+
+        $json = json_encode(
+            [
+                'status' => 'success',
+                'data'   => [
+                    'message' => 'Squadron has been created',
+                ],
+            ]
+        );
+
+        $response->getBody()->write($json);
+
+        return $response->withStatus(200);
     }
 
     public function putAction(Request $request, Response $response, $args)
     {
-        return $response->getBody()->write("edited, I guess? ");
+        return $response->getBody()->write("edited, I guess?");
     }
 
     public function deleteAction(Request $request, Response $response, $args)
     {
-        return $response->getBody()->write("deleted, I guess? ");
+        return $response->getBody()->write("deleted, I guess?");
     }
 }
