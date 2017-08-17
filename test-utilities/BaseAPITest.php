@@ -6,7 +6,7 @@
  * Time: 10:28
  */
 
-namespace Tests;
+namespace TestUtilities;
 
 use GuzzleHttp\Client;
 use Slim\Http\Request;

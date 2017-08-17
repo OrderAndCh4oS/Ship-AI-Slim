@@ -1,14 +1,14 @@
 {
     "name": "slim/slim-skeleton",
     "description": "A Slim Framework skeleton application for rapid development",
-    "keywords": ["microframework", "rest", "router", "psr7"],
-    "homepage": "http://github.com/slimphp/Slim-Skeleton",
+    "keywords": ["Basic AI", "Game", "JS"],
+    "homepage": "https://github.com/sarcoma/Ship-AI-Slim",
     "license": "MIT",
     "authors": [
         {
-            "name": "Josh Lockhart",
-            "email": "info@joshlockhart.com",
-            "homepage": "http://www.joshlockhart.com/"
+            "name": "Sean Cooper",
+            "email": "sean@orderandchaoscreative.com",
+            "homepage": "https://orderandchaoscreative.com/"
         }
     ],
     "require": {
@@ -25,10 +25,15 @@
         "phpunit/phpunit": ">=4.8 < 6.0",
         "guzzlehttp/guzzle": "^6.3"
     },
+    "autoload": {
+      "psr-4": {
+          "Oacc\\": "src/"
+      }
+    },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
-            "Oacc\\": "src/"
+            "TestUtilities\\": "test-utilities"
         }
     },
 	"scripts": {

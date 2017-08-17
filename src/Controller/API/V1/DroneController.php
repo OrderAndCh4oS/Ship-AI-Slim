@@ -59,11 +59,11 @@ class DroneController
             $json = json_encode([
                 'status' => 'success',
                 'data' => [
-                    'id'             => $drone->getId(),
+                    'id'             => (int) $drone->getId(),
                     'name'           => $drone->getName(),
-                    'thruster_power' => $drone->getThrusterPower(),
-                    'turning_speed'  => $drone->getTurningSpeed(),
-                    'kills'          => $drone->getKills()
+                    'thruster_power' => (int) $drone->getThrusterPower(),
+                    'turning_speed'  => (int) $drone->getTurningSpeed(),
+                    'kills'          => (int) $drone->getKills()
                 ]
             ]);
             $response->getBody()->write($json);

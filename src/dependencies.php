@@ -62,6 +62,10 @@ $container['Oacc\Controller\API\V1\DroneController'] = function (Container $cont
     return new Oacc\Controller\API\V1\DroneController($container->get('em'), $container->get('csrf'));
 };
 
+$container['Oacc\Controller\API\V1\SquadronController'] = function (Container $container) {
+    return new Oacc\Controller\API\V1\SquadronController($container->get('em'), $container->get('csrf'));
+};
+
 $container['em'] = function (Container $container) {
     $settings = $container->get('settings');
     $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
