@@ -104,4 +104,14 @@ class SquadronController
     {
         return $response->getBody()->write("posted, I guess? ");
     }
+
+    public function putAction(Request $request, Response $response, $args)
+    {
+        return $response->getBody()->write("edited, I guess? ");
+    }
+
+    public function deleteAction(Request $request, Response $response, $args)
+    {
+        return $response->getBody()->write("deleted, I guess? ");
+    }
 }

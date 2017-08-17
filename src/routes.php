@@ -14,9 +14,12 @@ $app->get('/select-squadrons', 'Oacc\Controller\MenuController:selectSquadronsAc
 $app->post('/ship-ai', 'Oacc\Controller\GameController:gameAction')->setName('ship-ai');
 
 $app->group('/api/v1', function() {
-    $this->get('/drones', 'Oacc\Controller\API\V1\DroneController:getAction');
     $this->get('/drones/{id}', 'Oacc\Controller\API\V1\DroneController:getAction');
-    $this->post('/drones/{id}', 'Oacc\Controller\API\V1\DroneController:postAction');
+    $this->post('/drones', 'Oacc\Controller\API\V1\DroneController:postAction');
+    $this->put('/drones/{id}', 'Oacc\Controller\API\V1\DroneController:putAction');
+    $this->delete('/drones/{id}', 'Oacc\Controller\API\V1\DroneController:deleteAction');
     $this->get('/squadrons/{id}', 'Oacc\Controller\API\V1\SquadronController:getAction');
-    $this->post('/squadrons/{id}', 'Oacc\Controller\API\V1\SquadronController:postAction');
+    $this->post('/squadrons', 'Oacc\Controller\API\V1\SquadronController:postAction');
+    $this->put('/squadrons/{id}', 'Oacc\Controller\API\V1\SquadronController:putAction');
+    $this->delete('/squadrons/{id}', 'Oacc\Controller\API\V1\SquadronController:deleteAction');
 });
