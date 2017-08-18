@@ -49,51 +49,25 @@ class SquadronController extends BaseAPIController
     public function getAction(Request $request, Response $response, $args)
     {
         $id = $args['id'];
+        /** @var Response $response */
         $response = $response->withHeader('Content-type', 'application/json');
 
-        /**
-         * @var Squadron $squadron
-         */
+        /** @var Squadron $squadron */
         $squadron = $this->em->getRepository('Oacc\Entity\Squadron')->find($id);
         if ($squadron) {
 
-            $drones = [];
+            $data = $this->getData($squadron);
+            $messages = ['message' => 'Squadron found'];
 
-            /**
-             * @var Drone $drone
-             */
-            foreach ($squadron->getDrones() as $drone) {
-                $drones[] = [
-                    'id' => (int)$drone->getId(),
-                    'name' => $drone->getName(),
-                    'thruster_power' => (int)$drone->getThrusterPower(),
-                    'turning_speed' => (int)$drone->getTurningSpeed(),
-                    'kills' => (int)$drone->getKills(),
-                ];
-            }
-
-            $json = json_encode(
-                [
-                    'status' => 'success',
-                    'data' => [
-                        'id' => (int)$squadron->getId(),
-                        'name' => $squadron->getName(),
-                        'cash' => $squadron->getName(),
-                        'drones' => $drones,
-                    ],
-                ]
-            );
-            $response->getBody()->write($json);
-
-            return $response->withStatus(200);
+            return $this->setSuccessJson($response, $messages, $data);
 
         } else {
             $json = json_encode(
                 [
                     'status' => 'error',
                     'errors' => [
-                        'message' => "Squadron not found"
-                    ]
+                        'message' => "Squadron not found",
+                    ],
                 ]
             );
             $response->getBody()->write($json);
@@ -108,7 +82,7 @@ class SquadronController extends BaseAPIController
 
         $errors = [];
 
-        if ( ! array_key_exists('name', $post)) {
+        if (!array_key_exists('name', $post)) {
             $errors[] = ['message' => 'JSON missing the name key'];
         }
 
@@ -116,7 +90,7 @@ class SquadronController extends BaseAPIController
             $errors[] = ['message' => 'Name must not be empty'];
         }
 
-        if ( ! empty($errors)) {
+        if (!empty($errors)) {
             return $this->setErrorJson($response, $errors);
         }
 
@@ -125,34 +99,99 @@ class SquadronController extends BaseAPIController
         $squadron->setName($post['name']);
         for ($i = 1; $i <= 10; $i++) {
             $drone = new Drone;
-            $drone->setName('Drone ' . $i);
+            $drone->setName('Drone '.$i);
             $drone->setSquadron($squadron);
             $this->em->persist($drone);
         }
         $this->em->persist($squadron);
         $this->em->flush();
 
-        $json = json_encode(
-            [
-                'status' => 'success',
-                'data'   => [
-                    'message' => 'Squadron has been created',
-                ],
-            ]
-        );
+        $data = $this->getData($squadron);
 
-        $response->getBody()->write($json);
+        $messages = ['message' => 'Squadron has been created'];
 
-        return $response->withStatus(200);
+        return $this->setSuccessJson($response, $messages, $data);
     }
 
     public function putAction(Request $request, Response $response, $args)
     {
-        return $response->getBody()->write("edited, I guess?");
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $args['id'];
+
+        /**
+         * @var Squadron $squadron
+         */
+        $squadron = $this->em->getRepository('Oacc\Entity\Squadron')->find($id);
+
+        if (!$squadron) {
+            $errors = ['message' => "Squadron not found"];
+
+            return $this->setErrorJson($response, $errors, 404);
+        }
+
+        $post = json_decode($request->getBody(), true);
+
+        if (array_key_exists('name', $post)) {
+            $squadron->setName($post['name']);
+        }
+
+        if (array_key_exists('cash', $post)) {
+            $cash = $squadron->getCash() + $post['cash'];
+            $squadron->setCash($cash);
+        }
+
+        $this->em->persist($squadron);
+        $this->em->flush();
+
+        $data = $this->getData($squadron);
+        $messages = ['message' => 'Squadron has been updated'];
+
+        return $this->setSuccessJson($response, $messages, $data);
     }
 
     public function deleteAction(Request $request, Response $response, $args)
     {
-        return $response->getBody()->write("deleted, I guess?");
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $args['id'];
+        $squadron = $this->em->getRepository('Oacc\Entity\Squadron')->find($id);
+        if (!$squadron) {
+            $errors = ['message' => "Squadron not found"];
+
+            return $this->setErrorJson($response, $errors, 404);
+        }
+
+        $this->em->remove($squadron);
+        $this->em->flush();
+
+        $messages = ['message' => 'Squadron has been deleted'];
+
+        return $this->setSuccessJson($response, $messages);
+    }
+
+    /**
+     * @param $squadron
+     * @return array
+     */
+    private function getData(Squadron $squadron)
+    {
+        $drones = [];
+
+        /** @var Drone $drone */
+        foreach ($squadron->getDrones() as $drone) {
+            $drones[] = [
+                'id' => (int)$drone->getId(),
+                'name' => $drone->getName(),
+                'thruster_power' => (int)$drone->getThrusterPower(),
+                'turning_speed' => (int)$drone->getTurningSpeed(),
+                'kills' => (int)$drone->getKills(),
+            ];
+        }
+
+        return [
+            'id' => (int)$squadron->getId(),
+            'name' => $squadron->getName(),
+            'cash' => $squadron->getName(),
+            'drones' => $drones,
+        ];
     }
 }

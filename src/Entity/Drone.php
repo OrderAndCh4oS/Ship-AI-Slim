@@ -40,6 +40,9 @@ class Drone
      */
     private $turningSpeed = 5;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $kills = 0;
 
     /**

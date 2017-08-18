@@ -17,9 +17,10 @@ class BaseAPIController
      * @param Response $response
      * @param $error_messages
      *
+     * @param int $status_code
      * @return Response
      */
-    protected function setErrorJson(Response $response, $error_messages)
+    protected function setErrorJson(Response $response, $error_messages, $status_code = 400)
     {
         $json = json_encode(
             [
@@ -29,6 +30,27 @@ class BaseAPIController
         );
         $response->getBody()->write($json);
 
-        return $response->withStatus(400);
+        return $response->withStatus($status_code);
+    }
+
+    /**
+     * @param Response $response
+     * @param $messages
+     * @param array $data
+     * @param int $status_code
+     * @return Response
+     */
+    protected function setSuccessJson(Response $response, $messages, $data = [], $status_code = 200)
+    {
+        $json = json_encode(
+            [
+                'status' => 'success',
+                'data' => $data,
+                'messages' => $messages,
+            ]
+        );
+        $response->getBody()->write($json);
+
+        return $response->withStatus($status_code);
     }
 }

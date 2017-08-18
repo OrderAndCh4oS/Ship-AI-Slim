@@ -9,6 +9,7 @@
 namespace TestUtilities;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
 use Slim\Http\Request;
 
 class BaseAPITest extends \PHPUnit_Framework_TestCase
@@ -33,5 +34,31 @@ class BaseAPITest extends \PHPUnit_Framework_TestCase
 
     public function setup() {
         $this->client = self::$staticClient;
+    }
+
+    /**
+     * @param Response $response
+     * @param $json
+     * @param int $statusCode
+     */
+    protected function successStatusAsserts(Response $response, $json, $statusCode = 200)
+    {
+        $this->assertEquals($statusCode, $response->getStatusCode());
+        $this->assertObjectHasAttribute('status', $json);
+        $this->assertEquals('success', $json->status);
+        $this->assertObjectHasAttribute('messages', $json);
+    }
+
+    /**
+     * @param Response $response
+     * @param $json
+     * @param int $statusCode
+     */
+    protected function errorStatusAsserts(Response $response, $json, $statusCode = 400)
+    {
+        $this->assertEquals($statusCode, $response->getStatusCode());
+        $this->assertObjectHasAttribute('status', $json);
+        $this->assertEquals('error', $json->status);
+        $this->assertObjectHasAttribute('errors', $json);
     }
 }
