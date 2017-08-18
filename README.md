@@ -1,26 +1,26 @@
-# Slim Framework 3 Skeleton Application
+# TODO
 
-Use this skeleton application to quickly setup and start working on a new Slim Framework 3 application. This application uses the latest Slim 3 with the PHP-View template renderer. It also uses the Monolog logger.
+## BASE REQUIREMENTS
 
-This skeleton application was built for Composer. This makes setting up a new Slim Framework application quick and easy.
+[] Add way to spend cash to upgrade drones
+[] Add way to buy additional drones
+[] Add way to rename drones
+[] Get drones from API to populate the game
+[] Update drone data based on game result
+[] Update squadron cash based on game result
+[] Track rounds played and rounds won by each squadron
 
-## Install the Application
+## API
 
-Run this command from the directory in which you want to install your new Slim Framework application.
+[] Data Transformers with Fractal
+[] Handle JSON Validation
+[] Implement JWT web tokens for authentication
 
-    php composer.phar create-project slim/slim-skeleton [my-app-name]
+## GAME ADDITIONS
 
-Replace `[my-app-name]` with the desired directory name for your new application. You'll want to:
-
-* Point your virtual host document root to your new application's `public/` directory.
-* Ensure `logs/` is web writeable.
-
-To run the application in development, you can also run this command. 
-
-	php composer.phar start
-
-Run this command to run the test suite
-
-	php composer.phar test
-
-That's it! Now go build something cool.
+[] Add Hull integrity for health of drone
+[] Add Shield/Armour value to block damage
+[] Workout way to gauge hit strength based on velocity and angle
+[] Try to determine the aggressor and give bonus to attack
+[] Add deflections after hit detection based on velocity and angle
+[] Leader Board for top squadrons based on squad value, calculated by cost of upgrades and number of drones
