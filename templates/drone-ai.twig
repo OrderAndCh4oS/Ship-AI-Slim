@@ -9,9 +9,10 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="js/vector.js"></script>
+    {{ parent() }}
+    <script src="js/vectorClass.js"></script>
     <script src="js/scoreClass.js"></script>
     <script src="js/UIClass.js"></script>
-    <script src="js/shipClass.js"></script>
-    <script src="js/ship-ai.js"></script>
+    <script src="js/droneClass.js"></script>
+    <script src="js/drone-ai.js"></script>
 {% endblock %}

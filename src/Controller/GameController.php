@@ -47,18 +47,9 @@ class GameController
 
     public function gameAction(Request $request, Response $response, $args)
     {
-        $squad_one_id = $request->getParam('team_one');
-        $squad_two_id = $request->getParam('team_two');
-        $squadron_one = $this->em->getRepository('Oacc\Entity\Squadron')->findOneBy($squad_one_id);
-        $squadron_two = $this->em->getRepository('Oacc\Entity\Squadron')->findOneBy($squad_two_id);
-
         return $this->view->render(
             $response,
-            'ship-ai.twig',
-            [
-                'squadron_one' => $squadron_one,
-                'squadron_two' => $squadron_two,
-            ]
+            'drone-ai.twig'
         );
     }
 

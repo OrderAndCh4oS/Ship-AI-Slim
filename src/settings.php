@@ -28,8 +28,8 @@ return [
             'connection' => [
                 'driver' => 'pdo_mysql',
                 'host' => 'localhost',
-                'dbname' => 'ship-ai',
-                'user' => 'ship',
+                'dbname' => 'drone-ai',
+                'user' => 'drone',
                 'password' => 'password',
             ],
         ],

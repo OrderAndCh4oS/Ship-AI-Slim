@@ -6,7 +6,7 @@
 
 {% block content %}
     <h1 class="title green">Select Squadrons</h1>
-    <form action="{{ path_for('ship-ai') }}" method="post">
+    <form action="{{ path_for('drone-ai') }}" method="post">
         <label for="team-one">Team One</label>
         <select id="team-one">
             {% for squadron in squadrons %}

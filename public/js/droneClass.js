@@ -1,5 +1,4 @@
-var shipClass = {
-        id: -1,
+var droneClass = {
         kills: 0,
         position: null,
         velocity: null,
@@ -9,36 +8,37 @@ var shipClass = {
         speed: 0.1,
         turningSpeed: 1,
         angle: 0,
-        direction: "left",
         colour: "#ff00ff",
-        friction: 1,
+    friction: 0.99,
         target: -1,
+    droneObject: {},
 
-        create: function (x, y, speed, turningSpeed) {
+    create: function (x, y, droneJson) {
             var obj = Object.create(this);
             obj.position = vector.create(x, y);
             obj.velocity = vector.create(0, 0);
             obj.velocity.setLength(0);
             obj.velocity.setAngle(Math.random() * Math.PI);
-            obj.speed = speed;
-            obj.turningSpeed = turningSpeed;
+        obj.speed = (droneJson.thruster_power / 100) * 0.25 + 0.05;
+        obj.turningSpeed = (droneJson.turning_speed / 100) * 0.7 + 0.3;
+        obj.droneObject = droneJson;
             return obj;
         },
 
-        accelerate: function (accel) {
-            this.velocity.addTo(accel);
+    accelerate: function (accelerate) {
+        this.velocity.addTo(accelerate);
         },
 
-        angleToPredictedLocation: function (ship) {
-            var ghostShip = vector.create(this.position.getX(), this.position.getY());
-            ghostShip.setLength(this.position.getLength());
-            ghostShip.setAngle(this.position.getAngle());
+    angleToPredictedLocation: function (drone) {
+        var ghostDrone = vector.create(this.position.getX(), this.position.getY());
+        ghostDrone.setLength(this.position.getLength());
+        ghostDrone.setAngle(this.position.getAngle());
             this.velocity.multiplyBy(this.friction);
             this.setThrust();
-            ghostShip.addTo(this.thrust);
+        ghostDrone.addTo(this.thrust);
             return Math.atan2(
-                ghostShip.getY() - ship.position.getY(),
-                ghostShip.getX() - ship.position.getX()
+                ghostDrone.getY() - drone.position.getY(),
+                ghostDrone.getX() - drone.position.getX()
             );
         },
 
@@ -79,7 +79,8 @@ var shipClass = {
             context.font = "11px Verdana";
             context.fillText(this.kills, -12, -12);
             context.fillStyle = "#000";
-            context.fillText(this.id, -7, 5);
+            console.log(this.droneObject.id);
+            context.fillText(this.droneObject.id, -7, 5);
             context.restore();
         },
 
@@ -135,15 +136,7 @@ var shipClass = {
             this.incrementAngle(turn);
         },
 
-        stopTurning: function () {
-            this.turning = false;
-        },
-
-        isTurning: function () {
-            return this.turning;
-        },
-
-        loopShipIfLeftDrawingArea: function (width, height) {
+    loopDroneIfLeftDrawingArea: function (width, height) {
             if (this.position.getX() > width) {
                 this.position.setX(0)
             }
@@ -158,7 +151,7 @@ var shipClass = {
             }
         },
 
-        setShipTurningSpeed: function (angleToClosest) {
+    setDroneTurningSpeed: function (angleToClosest) {
             switch (true) {
                 case (this.howClose(this.angle, angleToClosest) >= 0.6):
                     this.turnLeft(this.turningSpeed * 0.1);
@@ -184,8 +177,6 @@ var shipClass = {
                 case (this.howClose(this.angle, angleToClosest) < 0):
                     this.turnRight(this.howClose(this.angle, angleToClosest));
                     break;
-                default:
-                    this.stopTurning()
             }
         },
 
@@ -193,7 +184,7 @@ var shipClass = {
             return Math.atan2(Math.sin(x - y), Math.cos(x - y))
         },
 
-        setShipThrusters: function (angleToClosest) {
+    setDroneThrusters: function (angleToClosest) {
             if (this.howClose(this.angle, angleToClosest) <= 0.3 &&
                 this.howClose(this.angle, angleToClosest) >= -0.3) {
                 this.startThrusting(0.5)
@@ -208,15 +199,15 @@ var shipClass = {
             }
         },
 
-        findClosestShip: function (ship2, closestShip, j, i) {
-            var distance = this.distanceTo(ship2);
-            if (!closestShip.distance && i !== j) {
-                closestShip.angle = ship2.angleToPredictedLocation(this);
-                closestShip.distance = distance
+    findClosestDrone: function (drone2, closestDrone, j, i) {
+        var distance = this.distanceTo(drone2);
+        if (!closestDrone.distance && i !== j) {
+            closestDrone.angle = drone2.angleToPredictedLocation(this);
+            closestDrone.distance = distance
             }
-            if (distance < closestShip.distance && i !== j) {
-                closestShip.angle = ship2.angleToPredictedLocation(this);
-                closestShip.distance = distance
+        if (distance < closestDrone.distance && i !== j) {
+            closestDrone.angle = drone2.angleToPredictedLocation(this);
+            closestDrone.distance = distance
             }
         }
     }

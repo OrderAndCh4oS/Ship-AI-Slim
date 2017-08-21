@@ -2,7 +2,7 @@
     "name": "slim/slim-skeleton",
     "description": "A Slim Framework skeleton application for rapid development",
     "keywords": ["Basic AI", "Game", "JS"],
-    "homepage": "https://github.com/sarcoma/Ship-AI-Slim",
+  "homepage": "https://github.com/sarcoma/Drone-AI-Slim",
     "license": "MIT",
     "authors": [
         {

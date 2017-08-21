@@ -34,7 +34,7 @@ class DroneController
     private $em;
 
     /**
-     * ShipController constructor.
+     * DroneController constructor.
      * @param Twig $view
      * @param Guard $csrf
      * @param EntityManager $em
