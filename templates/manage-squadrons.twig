@@ -5,17 +5,55 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="title green">Manage Squadrons</h1>
-    <form method="post" action="{{ path_for('manage-squadron') }}">
-        <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
-        <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
-        <input name="name" value="" placeholder="Team Name" title="Team Name">
-        <input type="submit" value="Create Team">
-    </form>
-    {% for squadron in squadrons %}
-        <p><a href="{{ path_for('manage-drones', { 'id': squadron.id }) }}">{{ squadron.name }}</a></p>
-    {% endfor %}
-    <p>
-        <a href="{{ path_for('menu') }}">Back</a>
-    </p>
+    <section id="root">
+        <h1 class="title green">Manage Squadrons</h1>
+        <form method="post" action="{{ path_for('manage-squadron') }}" @submit.prevent="onSubmit">
+            <input type="hidden" name="{{ nameKey }}" value="{{ name }}" v-model="csrf_name">
+            <input type="hidden" name="{{ valueKey }}" value="{{ value }}" v-model="csrf_value">
+            <input name="name" value="" placeholder="Team Name" title="Team Name" v-model="name">
+            <input type="submit" value="Create Team">
+        </form>
+        <ul>
+            <li v-for="error in errors">
+                <span v-text="error.message" class="red"></span>
+            </li>
+        </ul>
+        {% for squadron in squadrons %}
+            <p><a href="{{ path_for('manage-drones', { 'id': squadron.id }) }}">{{ squadron.name }}</a></p>
+        {% endfor %}
+        <p>
+            <a href="{{ path_for('menu') }}">Back</a>
+        </p>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        new Vue({
+            el: '#root',
+
+            data: {
+                csrf_name: '',
+                csrf_value: '',
+                name: '',
+                errors: []
+            },
+
+            methods: {
+                onSubmit() {
+                    axios.post('/api/v1/squadrons', {
+                        csrf_name: this.csrf_name,
+                        csrf_value: this.csrf_value,
+                        name: this.name
+                    })
+                        .then(response => alert(response.data.data))
+                        .catch(error => {
+                            console.log(error.response.data.errors);
+                            this.errors = error.response.data.errors
+                        })
+                }
+            }
+        });
+    </script>
 {% endblock %}
