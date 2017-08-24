@@ -93,10 +93,16 @@ class DroneController extends BaseAPIController
         $errors = [];
 
         if (!array_key_exists('squadron_id', $post)) {
-            $errors[] = ['message' => 'JSON missing the squadron_id key'];
+            $errors[] = [
+                'field' => 'squadron',
+                'message' => 'JSON missing the squadron_id key',
+            ];
         }
         if (!array_key_exists('name', $post)) {
-            $errors[] = ['message' => 'JSON missing the name key'];
+            $errors[] = [
+                'field' => 'name',
+                'message' => 'You must enter a name',
+            ];
         }
         if (empty($post['name'])) {
             $errors[] = ['message' => 'Name must not be empty'];
@@ -121,7 +127,6 @@ class DroneController extends BaseAPIController
         $this->em->persist($drone);
         $this->em->flush();
 
-
         $messages = ['message' => 'Drone has been created'];
         $data = $this->getData($drone);
 
@@ -137,9 +142,10 @@ class DroneController extends BaseAPIController
         /** @var Drone $drone */
         $drone = $this->em->getRepository('Oacc\Entity\Drone')->find($id);
 
-        if (!$drone) {
-            $errors = ['message' => "Drone not found"];
+        $errors = [];
 
+        if (!$drone) {
+            $errors[] = ['message' => "Drone not found"];
             return $this->setErrorJson($response, $errors, 404);
         }
 
@@ -149,17 +155,38 @@ class DroneController extends BaseAPIController
             $drone->setName($post['name']);
         }
 
+        $statChangeCost = 0;
+
         if (array_key_exists('thruster_power', $post)) {
+            $difference = $post['thruster_power'] - $drone->getThrusterPower();
             $drone->setThrusterPower($post['thruster_power']);
+            if ($difference > 0) {
+                $statChangeCost += $difference;
+            }
         }
 
         if (array_key_exists('turning_speed', $post)) {
+            $difference = $post['turning_speed'] - $drone->getTurningSpeed();
             $drone->setTurningSpeed($post['turning_speed']);
+            if ($difference > 0) {
+                $statChangeCost += $difference;
+            }
         }
 
         if (array_key_exists('kills', $post)) {
             $kills = $drone->getKills() + $post['kills'];
             $drone->setKills($kills);
+        }
+
+        if ($statChangeCost <= $drone->getSquadron()->getCash()) {
+            $squadron = $drone->getSquadron();
+            $cash = $squadron->getCash() - $statChangeCost;
+            $squadron->setCash($cash);
+            $this->em->persist($squadron);
+        } else {
+            $errors[] = ['message' => 'Not enough cash for upgrade'];
+
+            return $this->setErrorJson($response, $errors, 400);
         }
 
         $this->em->persist($drone);

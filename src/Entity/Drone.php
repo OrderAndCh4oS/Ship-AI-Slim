@@ -137,4 +137,25 @@ class Drone
     {
         $this->kills = $kills;
     }
+
+    /**
+     * @param $newStatValue
+     * @param $currentStatValue
+     * @return bool
+     */
+    public function isStatIncrease($newStatValue, $currentStatValue)
+    {
+        $difference = $newStatValue - $currentStatValue;
+
+        return $difference > 0;
+    }
+
+    /**
+     * @param $difference
+     * @return mixed
+     */
+    public function canAffordStatIncrease($difference)
+    {
+        return $difference <= $this->getSquadron()->getCash();
+    }
 }

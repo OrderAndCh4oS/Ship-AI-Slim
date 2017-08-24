@@ -17,7 +17,6 @@ startGame = function (squadronOneId, squadronTwoId) {
 
     update();
 
-
     function getSquadron(id) {
         axios.get('/api/v1/squadrons/' + id)
             .then(function (response) {
@@ -37,7 +36,6 @@ startGame = function (squadronOneId, squadronTwoId) {
             instantiateDrone(drones[i]);
         }
     }
-
 
     function updateSquadronData() {
         var i;
