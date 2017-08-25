@@ -13,11 +13,7 @@
             <input name="name" value="" placeholder="Team Name" title="Team Name" v-model="name">
             <input type="submit" value="Create Team">
         </form>
-        <ul>
-            <li v-for="error in errors">
-                <span v-text="error.message" class="red"></span>
-            </li>
-        </ul>
+        <span v-text="errors.get('name')" class="red"></span>
         {% for squadron in squadrons %}
             <p><a href="{{ path_for('manage-drones', { 'id': squadron.id }) }}">{{ squadron.name }}</a></p>
         {% endfor %}
@@ -30,6 +26,27 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        class Errors {
+
+            constructor() {
+                this.errors = {};
+            }
+
+            get(field) {
+                console.log(this.errors[field]);
+                if (this.errors[field]) {
+                    return this.errors[field]
+                }
+                return '';
+            }
+
+            record(errors) {
+                for(let i = 0; i < errors.length; i++) {
+                    this.errors[errors[i].field] = errors[i].message;
+                }
+            }
+        }
+
         new Vue({
             el: '#root',
 
@@ -37,7 +54,7 @@
                 csrf_name: '',
                 csrf_value: '',
                 name: '',
-                errors: []
+                errors: new Errors()
             },
 
             methods: {
@@ -49,8 +66,7 @@
                     })
                         .then(response => alert(response.data.data))
                         .catch(error => {
-                            console.log(error.response.data.errors);
-                            this.errors = error.response.data.errors
+                            this.errors.record(error.response.data.errors);
                         })
                 }
             }
