@@ -83,11 +83,17 @@ class SquadronController extends BaseAPIController
         $errors = [];
 
         if (!array_key_exists('name', $post)) {
-            $errors[] = ['message' => 'JSON missing the name key'];
+            $errors[] = [
+                'field' => 'name',
+                'message' => 'Must provide name',
+            ];
         }
 
         if (empty($post['name'])) {
-            $errors[] = ['message' => 'Name must not be empty'];
+            $errors[] = [
+                'field' => 'name',
+                'message' => 'Name must not be empty',
+            ];
         }
 
         if (!empty($errors)) {

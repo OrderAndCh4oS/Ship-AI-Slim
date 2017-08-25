@@ -98,15 +98,19 @@ class DroneController extends BaseAPIController
                 'message' => 'JSON missing the squadron_id key',
             ];
         }
+
         if (!array_key_exists('name', $post)) {
             $errors[] = [
                 'field' => 'name',
                 'message' => 'You must enter a name',
             ];
         }
+
         if (empty($post['name'])) {
             $errors[] = ['message' => 'Name must not be empty'];
+
         }
+
         if (!empty($errors)) {
             return $this->setErrorJson($response, $errors);
         }
