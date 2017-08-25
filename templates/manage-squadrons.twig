@@ -33,17 +33,17 @@
             }
 
             get(field) {
-                console.log(this.errors[field]);
                 if (this.errors[field]) {
-                    return this.errors[field]
+                    return this.errors[field];
                 }
-                return '';
             }
 
             record(errors) {
+                let arr = {};
                 for(let i = 0; i < errors.length; i++) {
-                    this.errors[errors[i].field] = errors[i].message;
+                    arr[errors[i].field] = errors[i].message;
                 }
+                this.errors = arr;
             }
         }
 
