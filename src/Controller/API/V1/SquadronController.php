@@ -48,16 +48,30 @@ class SquadronController extends BaseAPIController
      */
     public function getAction(Request $request, Response $response, $args)
     {
-        $id = $args['id'];
         /** @var Response $response */
         $response = $response->withHeader('Content-type', 'application/json');
+        $squadronRepository = $this->em->getRepository('Oacc\Entity\Squadron');
+        $data = false;
+        $message = '';
+        // ToDo: Clean up this utter fuckfest
+        if (isset($args['id'])) {
+            /** @var Squadron $squadron */
+            $squadron = $squadronRepository->find($args['id']);
+            if ($squadron) {
+                $data = $this->getData($squadron);
+                $message = "Squadron found";
+            }
+        } else {
+            $squadrons = $squadronRepository->findAll();
+            if ($squadrons) {
+                $data = $this->getAllData($squadrons);
+                $message = "Squadrons found";
+            }
+        }
 
-        /** @var Squadron $squadron */
-        $squadron = $this->em->getRepository('Oacc\Entity\Squadron')->find($id);
-        if ($squadron) {
+        if ($data && $message) {
 
-            $data = $this->getData($squadron);
-            $messages = ['message' => 'Squadron found'];
+            $messages = ['message' => $message];
 
             return $this->setSuccessJson($response, $messages, $data);
 
@@ -172,6 +186,16 @@ class SquadronController extends BaseAPIController
         $messages = ['message' => 'Squadron has been deleted'];
 
         return $this->setSuccessJson($response, $messages);
+    }
+
+    private function getAllData($squadrons)
+    {
+        $data = [];
+        foreach ($squadrons as $squadron) {
+            $data[] = $this->getData($squadron);
+        }
+
+        return $data;
     }
 
     /**

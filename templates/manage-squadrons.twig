@@ -7,16 +7,22 @@
 {% block content %}
     <section id="root">
         <h1 class="title green">Manage Squadrons</h1>
-        <form method="post" action="{{ path_for('manage-squadron') }}" @submit.prevent="onSubmit">
-            <input type="hidden" name="{{ nameKey }}" value="{{ name }}" v-model="csrf_name">
-            <input type="hidden" name="{{ valueKey }}" value="{{ value }}" v-model="csrf_value">
-            <input name="name" value="" placeholder="Team Name" title="Team Name" v-model="name">
-            <input type="submit" value="Create Team">
+        <form method="post" action="{{ path_for('manage-squadron') }}"
+              @submit.prevent="onSubmit"
+              @keydown="form.errors.clear($event.target.name)">
+            <input type="hidden" name="{{ nameKey }}" value="{{ name }}" v-model="form.csrf_name">
+            <input type="hidden" name="{{ valueKey }}" value="{{ value }}" v-model="form.csrf_value">
+            <input name="name" value="" placeholder="Team Name" title="Team Name" v-model="form.name">
+            <input type="submit" value="Create Team" :disabled="form.errors.any()">
         </form>
-        <span v-text="errors.get('name')" class="red"></span>
-        {% for squadron in squadrons %}
-            <p><a href="{{ path_for('manage-drones', { 'id': squadron.id }) }}">{{ squadron.name }}</a></p>
-        {% endfor %}
+        <span class="red"
+              v-if="form.errors.has('name')"
+              v-text="form.errors.get('name')"></span>
+        <template v-for="squadron in squadrons">
+            <p>
+                <a :href="squadronUrl(squadron.id)" v-text="squadron.name"></a>
+            </p>
+        </template>
         <p>
             <a href="{{ path_for('menu') }}">Back</a>
         </p>
@@ -32,7 +38,7 @@
                 this.errors = {};
             }
 
-            get(field) {
+            get (field) {
                 if (this.errors[field]) {
                     return this.errors[field];
                 }
@@ -40,36 +46,115 @@
 
             record(errors) {
                 let arr = {};
-                for(let i = 0; i < errors.length; i++) {
+                for (let i = 0; i < errors.length; i++) {
                     arr[errors[i].field] = errors[i].message;
                 }
                 this.errors = arr;
             }
+
+            clear(field) {
+                if (field)
+                    delete this.errors[field];
+                else
+                    this.errors = {};
+            }
+
+            has(field) {
+                return this.errors.hasOwnProperty(field)
+            }
+
+            any() {
+                return Object.keys(this.errors).length > 0;
+            }
+        }
+
+        class Form {
+            constructor(data) {
+
+                this.originalData = data;
+
+                for (let field in data) {
+                    this[field] = data[field];
+                }
+
+                this.errors = new Errors()
+            }
+
+            data() {
+                let data = {};
+                for (let property in this.originalData) {
+                    data[property] = this[property];
+                }
+                return data;
+            }
+
+            submit(requestType, url) {
+                return new Promise((resolve, reject) => {
+                    axios[requestType](url, this.data())
+                        .then(response => {
+                            this.onSuccess(response.data);
+                            resolve(response.data);
+                        })
+                        .catch(
+                            error => {
+                                this.onFail(error.response.data.errors);
+                                reject(error.response.data.errors)
+                            }
+                        )
+                });
+            }
+
+            onSuccess(data) {
+                this.errors.clear();
+                this.reset();
+            }
+
+            onFail(errors) {
+                this.errors.record(errors);
+            }
+
+            reset() {
+                for (let field in this.originalData) {
+                    this[field] = ''
+                }
+            }
+
         }
 
         new Vue({
             el: '#root',
 
             data: {
-                csrf_name: '',
-                csrf_value: '',
-                name: '',
-                errors: new Errors()
+                form: new Form({
+                    csrf_name: '',
+                    csrf_value: '',
+                    name: ''
+                }),
+                squadrons: {}
+            },
+
+            mounted() {
+                axios.get('/api/v1/squadrons')
+                    .then(response => {
+                        console.log(response);
+                        this.squadrons = response.data.data;
+                    })
+                    .catch(error => console.log(error))
             },
 
             methods: {
                 onSubmit() {
-                    axios.post('/api/v1/squadrons', {
-                        csrf_name: this.csrf_name,
-                        csrf_value: this.csrf_value,
-                        name: this.name
-                    })
-                        .then(response => alert(response.data.data))
-                        .catch(error => {
-                            this.errors.record(error.response.data.errors);
+                    this.form.submit('post', '/api/v1/squadrons')
+                        .then(data => {
+                            this.squadrons.push(data.data);
                         })
+                        .catch(errors => console.log(errors));
+                },
+
+                squadronUrl(id) {
+                    return '/manage-drones/' + id;
                 }
-            }
+            },
         });
     </script>
 {% endblock %}

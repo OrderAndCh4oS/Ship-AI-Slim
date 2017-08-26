@@ -44,9 +44,18 @@ class SquadronTest extends BaseAPITest
     public function testGET()
     {
         /** @var Response $response */
+        $response = $this->client->get('/api/v1/squadrons/');
+        $json = json_decode($response->getBody());
+        $this->successStatusAsserts($response, $json);
+    }
+
+    public function testGETOne()
+    {
+        /** @var Response $response */
         $response = $this->client->get('/api/v1/squadrons/1');
         $json = json_decode($response->getBody());
         $this->successStatusAsserts($response, $json);
+        $this->squadronDataAsserts($json);
 
     }
 

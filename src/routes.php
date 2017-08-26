@@ -28,6 +28,7 @@ $app->group(
         $this->post('/drones', 'Oacc\Controller\API\V1\DroneController:postAction');
         $this->put('/drones/{id}', 'Oacc\Controller\API\V1\DroneController:putAction');
         $this->delete('/drones/{id}', 'Oacc\Controller\API\V1\DroneController:deleteAction');
+        $this->get('/squadrons', 'Oacc\Controller\API\V1\SquadronController:getAction');
         $this->get('/squadrons/{id}', 'Oacc\Controller\API\V1\SquadronController:getAction');
         $this->post('/squadrons', 'Oacc\Controller\API\V1\SquadronController:postAction');
         $this->put('/squadrons/{id}', 'Oacc\Controller\API\V1\SquadronController:putAction');
