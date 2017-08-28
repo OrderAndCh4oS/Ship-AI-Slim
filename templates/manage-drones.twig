@@ -29,8 +29,6 @@
                 <td>
                     <form action="{{ path_for('manage-drones', {'id': drones[0].squadron.id}) }}" method="post" id="drone-{{ drone.id }}">
                         <input type="hidden" name="id" value="{{ drone.id }}">
-                        <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
-                        <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
                         <input type="submit" name="submit" id="submit" value="Submit">
                     </form>
                 </td>

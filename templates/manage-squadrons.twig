@@ -10,8 +10,6 @@
         <form method="post" action="{{ path_for('manage-squadron') }}"
               @submit.prevent="onSubmit"
               @keydown="form.errors.clear($event.target.name)">
-            <input type="hidden" name="{{ nameKey }}" value="{{ name }}" v-model="form.csrf_name">
-            <input type="hidden" name="{{ valueKey }}" value="{{ value }}" v-model="form.csrf_value">
             <input name="name" value="" placeholder="Team Name" title="Team Name" v-model="form.name">
             <input type="submit" value="Create Team" :disabled="form.errors.any()">
         </form>

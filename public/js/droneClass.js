@@ -79,7 +79,6 @@ var droneClass = {
             context.font = "11px Verdana";
             context.fillText(this.kills, -12, -12);
             context.fillStyle = "#000";
-            console.log(this.droneObject.id);
             context.fillText(this.droneObject.id, -7, 5);
             context.restore();
         },

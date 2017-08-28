@@ -10,7 +10,8 @@ startGame = function (squadronOneId, squadronTwoId) {
         deadDrones = [],
         scores = scoreClass.create(),
         UI = UIClass.create(width, height),
-        squadronCount = 0;
+        squadronCount = 0,
+        updated = false;
 
     getSquadron(squadronOneId);
     getSquadron(squadronTwoId);
@@ -20,7 +21,6 @@ startGame = function (squadronOneId, squadronTwoId) {
     function getSquadron(id) {
         axios.get('/api/v1/squadrons/' + id)
             .then(function (response) {
-                console.log(response);
                 var squadron = response.data.data;
                 createSquadron(squadron.drones);
                 squadrons[squadronCount] = squadron;
@@ -39,13 +39,53 @@ startGame = function (squadronOneId, squadronTwoId) {
 
     function updateSquadronData() {
         var i;
-        for (i = 0; i < drones.length; i++) {
 
+        for (i = 0; i < drones.length; i++) {
+            updateDroneKills(drones[i]);
         }
 
         for (i = 0; i < deadDrones.length; i++) {
-
+            updateDeadDrone(drones[i]);
         }
+    }
+
+    function updateDroneKills(drone) {
+        var data = {
+            kills: drone.kills
+        };
+        putDrone(drone.droneObject.id, data)
+    }
+
+    function updateDeadDrone(drone) {
+        if (drone.thrusterPower > 5 && drone.turningSpeed > 5) {
+            var data = {
+                thruster_power: drone.droneObject.thruster_power -= 5,
+                turning_speed: drone.droneObject.turning_speed -= 5,
+            };
+            putDrone(drone.droneObject.id, data);
+        } else {
+            deleteDrone(drone.droneObject.id);
+        }
+    }
+
+    function putDrone(id, data) {
+        axios.put('/api/v1/drones/' + id, data)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    function deleteDrone(id) {
+        axios.delete('/api/v1/drones/' + id)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     function update() {
@@ -77,15 +117,16 @@ startGame = function (squadronOneId, squadronTwoId) {
             drone.loopDroneIfLeftDrawingArea(width, height);
         }
 
-        if (UI.countdown() === 0) {
+        if (UI.countdown() <= 0) {
             gameOver = true;
         }
 
         removeDeadDrones();
-        if (!gameOver) {
+        if (!gameOver && !updated) {
             requestAnimationFrame(update)
         } else {
             updateSquadronData();
+            updated = true
         }
     }
 
@@ -148,10 +189,12 @@ startGame = function (squadronOneId, squadronTwoId) {
         for (var k = deadDrones.length - 1; k >= 0; k--) {
             var index = deadDrones[k];
             drones[index].drawExplosion(context);
+            updateDroneKills(drones[index]);
+            updateDeadDrone(drones[index]);
             drones.splice(index, 1);
             deadDrones.pop()
         }
     }
 };
 
-startGame(1, 2);
+startGame(5, 6);

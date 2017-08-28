@@ -24,26 +24,12 @@ class SquadronController
     private $view;
 
     /**
-     * @var Guard
-     */
-    private $csrf;
-
-    /**
-     * @var EntityManager
-     */
-    private $em;
-
-    /**
      * SquadronController constructor.
      * @param Twig $view
-     * @param Guard $csrf
-     * @param EntityManager $em
      */
-    public function __construct(Twig $view, Guard $csrf, EntityManager $em)
+    public function __construct(Twig $view)
     {
         $this->view = $view;
-        $this->csrf = $csrf;
-        $this->em = $em;
     }
 
     /**
@@ -53,43 +39,6 @@ class SquadronController
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function manageSquadronAction(Request $request, Response $response, $args) {
-        if ($request->isPost()) {
-            $squadron = new Squadron;
-            $squadron->setName($request->getParam('name'));
-            for ($i = 1; $i <= 10; $i++) {
-                $drone = new Drone;
-                $drone->setName('Drone '.$i);
-                $drone->setSquadron($squadron);
-                $this->em->persist($drone);
-            }
-            $this->em->persist($squadron);
-            $this->em->flush();
-            return $this->view->render(
-                $response,
-                'manage-drones.twig',
-                [
-                    'squadron' => $squadron
-                ]
-            );
-        }
-
-        $nameKey = $this->csrf->getTokenNameKey();
-        $valueKey = $this->csrf->getTokenValueKey();
-        $name = $request->getAttribute($nameKey);
-        $value = $request->getAttribute($valueKey);
-
-        $squadrons = $this->em->getRepository('Oacc\Entity\Squadron')->findAll();
-
-        return $this->view->render(
-            $response,
-            'manage-squadrons.twig',
-            [
-                'nameKey' => $nameKey,
-                'valueKey' => $valueKey,
-                'name' => $name,
-                'value' => $value,
-                'squadrons' => $squadrons
-            ]
-        );
+        return $this->view->render($response, 'manage-squadrons.twig');
     }
 }

@@ -1,9 +1,11 @@
 var scoreClass = {
     scores: {red: 0, green: 0, blue: 0, pink: 0, yellow: 0, cyan: 0},
     isDisplayed: false,
+
     create: function () {
         return Object.create(this);
     },
+
     incrementScore: function (colour) {
         switch (colour) {
             case '#ff3243':
@@ -26,6 +28,7 @@ var scoreClass = {
                 break
         }
     },
+
     makeTitle: function () {
         var title;
         title = document.createElement('h1');
@@ -33,6 +36,7 @@ var scoreClass = {
         title.innerHTML = "Final Scores";
         return title;
     },
+
     makeLink: function (title, href, className) {
         var link = document.createElement('a');
         link.innerHTML = title;
@@ -40,6 +44,7 @@ var scoreClass = {
         link.classList.add(className);
         return link;
     },
+
     makeScoresList: function () {
         var scoresList = document.createElement('ul');
         for (var key in this.scores) {
@@ -52,6 +57,7 @@ var scoreClass = {
         }
         return scoresList;
     },
+
     makeScoresHolder: function (title, scoresList, backLink, restartLink) {
         var scoresHolder = document.createElement('div');
         scoresHolder.classList.add('holder');
@@ -61,6 +67,7 @@ var scoreClass = {
         scoresHolder.appendChild(restartLink);
         return scoresHolder;
     },
+
     displayScores: function () {
         var scoresList, title, scoresHolder, restartLink, backLink;
         this.isDisplayed = true;

@@ -11,7 +11,7 @@ canvas {
 }
 
 body {
-    padding: 0 0 ;
+    padding: 0 0;
     background-color: #000;
     text-align: center;
 }
@@ -107,18 +107,26 @@ table {
     border-collapse: collapse;
 }
 
+th {
+    padding: 4px 8px;
+}
+
 td {
     border: 1px solid #61ff83;
-    padding: 4px;
+    padding: 0;
+}
+
+td input {
+    width: 100%;
+    border: none;
 }
 
 input {
     box-sizing: border-box;
     background-color: transparent;
-    border: none;
+    border: 1px solid #61ff83;
     padding: 8px;
     color: #61ff83;
-    width: 100%;
 }
 
 input[type="submit"] {

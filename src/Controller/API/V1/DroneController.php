@@ -85,6 +85,9 @@ class DroneController extends BaseAPIController
 
     public function postAction(Request $request, Response $response, $args)
     {
+        $f = fopen('test.txt', 'w');
+        fwrite($f, 'post');
+        fclose($f);
         /** @var Response $response */
         $response = $response->withHeader('Content-type', 'application/json');
 
@@ -138,6 +141,11 @@ class DroneController extends BaseAPIController
 
     public function putAction(Request $request, Response $response, $args)
     {
+
+        $f = fopen('test.txt', 'w');
+        fwrite($f, 'put');
+        fclose($f);
+
         /** @var Response $response */
         $response = $response->withHeader('Content-type', 'application/json');
         $id = $args['id'];
