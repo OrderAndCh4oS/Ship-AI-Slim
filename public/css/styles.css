@@ -41,9 +41,13 @@ a:hover, a:active, a:focus {
 }
 
 .title {
-    font-size: 80px;
+    font-size: 76px;
     color: #ff3243;
     margin-bottom: 120px;
+}
+
+.small-title {
+    font-size: 36px;
 }
 
 .scores-title {
@@ -109,10 +113,12 @@ td {
 }
 
 input {
+    box-sizing: border-box;
     background-color: transparent;
-    border: 1px solid #61ff83;
+    border: none;
     padding: 8px;
     color: #61ff83;
+    width: 100%;
 }
 
 input[type="submit"] {

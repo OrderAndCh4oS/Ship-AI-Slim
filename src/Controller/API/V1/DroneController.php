@@ -17,7 +17,6 @@ use Slim\Http\Response;
 
 class DroneController extends BaseAPIController
 {
-
     /**
      * @var EntityManager
      */
