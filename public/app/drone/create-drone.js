@@ -11,8 +11,7 @@ new Vue({
     },
 
     mounted() {
-        console.log("mounted");
-        axios.get('/api/v1/drones/' +)
+        axios.get('/api/v1/squadrons/' + 14)
             .then(response => {
                 console.log(response);
                 this.squadrons = response.data.data;

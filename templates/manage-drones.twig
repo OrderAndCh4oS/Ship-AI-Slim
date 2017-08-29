@@ -5,19 +5,19 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="title green">Squadron name: {{ drones[0].squadron.name }}</h1>
+    <section id="root"><h1 class="title green">Squadron name: {{ drones[0].squadron.name }}</h1>
     <p class="small-title green">Cash: {{ drones[0].squadron.cash }}</p>
     <p class="red">{{ message }}</p>
-    <list-drone :drones="drones"></list-drone>
+        <drone-list :drones="drones"></drone-list>
     <p>
         <a href="{{ path_for('manage-squadron') }}">Back</a>
-    </p>
+    </p></section>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
     <script src="/app/errors.js"></script>
     <script src="/app/form.js"></script>
-    <script src="/app/squadron/squadron-list.js"></script>
-    <script src="/app/squadron/squadron-item.js"></script>
-    <script src="/app/squadron/create-squadron.js"></script>
+    <script src="/app/drone/drone-list.js"></script>
+    <script src="/app/drone/update-drone-item.js"></script>
+    <script src="/app/drone/create-drone.js"></script>
 {% endblock %}

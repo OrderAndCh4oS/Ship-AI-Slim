@@ -9,7 +9,7 @@ Vue.component('drone-list', {
                 <th>Turning Speed</th>
                 <th>Save</th>
             </tr>
-            <update-drone-item v-for="drone in drones" :drone="drone"></update-drone-item>
+            <update-drone-item v-for="drone in drones" :drone="drone" :key="drone.id"></update-drone-item>
         </table>
     `
 });
