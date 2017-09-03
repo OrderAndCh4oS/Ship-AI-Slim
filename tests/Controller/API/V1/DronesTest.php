@@ -44,7 +44,7 @@ class DronesTest extends BaseAPITest
     public function testGET()
     {
         /** @var Response $response */
-        $response = $this->client->get('/api/v1/drones/1');
+        $response = $this->client->get('/api/v1/drones/12');
         $json = json_decode($response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertObjectHasAttribute('status', $json);
@@ -71,7 +71,7 @@ class DronesTest extends BaseAPITest
 
         /** @var Response $response */
         $response = $this->client->put(
-            '/api/v1/drones/11',
+            '/api/v1/drones/12',
             [
                 'body' => json_encode($data),
             ]
@@ -80,7 +80,6 @@ class DronesTest extends BaseAPITest
         $json = json_decode($response->getBody());
         $this->successStatusAsserts($response, $json);
         $this->droneDataAsserts($json);
-
     }
 
     public function testPUTNotFound()
@@ -117,7 +116,7 @@ class DronesTest extends BaseAPITest
 
         /** @var Response $response */
         $response = $this->client->put(
-            '/api/v1/drones/7',
+            '/api/v1/drones/12',
             [
                 'body' => json_encode($data),
                 'http_errors' => false,
