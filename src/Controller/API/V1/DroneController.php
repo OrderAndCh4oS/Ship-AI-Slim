@@ -11,6 +11,8 @@ namespace Oacc\Controller\API\V1;
 
 use Doctrine\ORM\EntityManager;
 use Oacc\Entity\Drone;
+use Oacc\Entity\Squadron;
+use Oacc\Services\DroneUtilities;
 use Slim\Csrf\Guard;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -21,10 +23,8 @@ class DroneController extends BaseAPIController
      * @var EntityManager
      */
     private $em;
-    /**
-     * @var Guard
-     */
-    private $csrf;
+
+    private $droneUtilities;
 
     /**
      * @param $drone
@@ -45,12 +45,12 @@ class DroneController extends BaseAPIController
      * DroneController constructor.
      *
      * @param EntityManager $em
-     * @param Guard $csrf
+     * @param DroneUtilities $droneUtilities
      */
-    public function __construct(EntityManager $em, Guard $csrf)
+    public function __construct(EntityManager $em, DroneUtilities $droneUtilities)
     {
         $this->em = $em;
-        $this->csrf = $csrf;
+        $this->droneUtilities = $droneUtilities;
     }
 
     /**
@@ -163,36 +163,23 @@ class DroneController extends BaseAPIController
             $drone->setName($post['name']);
         }
 
-        $statChangeCost = 0;
+        $stat = $this->updateStat('thruster_power', $post, $drone->getThrusterPower());
+        $drone->setThrusterPower($stat);
 
-        if (array_key_exists('thruster_power', $post)) {
-            $difference = $post['thruster_power'] - $drone->getThrusterPower();
-            $drone->setThrusterPower($post['thruster_power']);
-            if ($difference > 0) {
-                $statChangeCost += $difference;
-            }
-        }
-
-        if (array_key_exists('turning_speed', $post)) {
-            $difference = $post['turning_speed'] - $drone->getTurningSpeed();
-            $drone->setTurningSpeed($post['turning_speed']);
-            if ($difference > 0) {
-                $statChangeCost += $difference;
-            }
-        }
+        $stat = $this->updateStat('turning_speed', $post, $drone->getTurningSpeed());
+        $drone->setTurningSpeed($stat);
 
         if (array_key_exists('kills', $post)) {
             $kills = $drone->getKills() + $post['kills'];
             $drone->setKills($kills);
         }
 
-        if ($statChangeCost <= $drone->getSquadron()->getCash()) {
-            $squadron = $drone->getSquadron();
-            $cash = $squadron->getCash() - $statChangeCost;
-            $squadron->setCash($cash);
-            $this->em->persist($squadron);
-        } else {
-            $errors[] = ['message' => 'Not enough cash for upgrade'];
+        $squadron = $drone->getSquadron();
+
+        try {
+            $this->droneUtilities->spendCash($squadron);
+        } catch(\Exception $e) {
+            $errors[] = ['message' => $e->getMessage()];
 
             return $this->setErrorJson($response, $errors, 400);
         }
@@ -224,5 +211,21 @@ class DroneController extends BaseAPIController
         $messages = ['message' => 'Drone has been deleted'];
 
         return $this->setSuccessJson($response, $messages);
+    }
+
+    /**
+     * @param $key
+     * @param $post
+     * @param $stat
+     * @return mixed
+     */
+    private function updateStat($key, $post, $stat)
+    {
+        if (array_key_exists($key, $post)) {
+            $this->droneUtilities->updateStatChangeCost($post[$key], $stat);
+            $stat = $post[$key];
+        }
+
+        return $stat;
     }
 }

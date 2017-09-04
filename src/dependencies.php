@@ -42,6 +42,10 @@ $container['csrf'] = function () {
     return new Guard;
 };
 
+$container['drone-utilities'] = function (Container $container) {
+    return new \Oacc\Services\DroneUtilities($container->get('em'));
+};
+
 $container['Oacc\Controller\MenuController'] = function (Container $container) {
     return new Oacc\Controller\MenuController($container->get('view'), $container->get('csrf'), $container->get('em'));
 };
@@ -59,11 +63,11 @@ $container['Oacc\Controller\GameController'] = function (Container $container) {
 };
 
 $container['Oacc\Controller\API\V1\DroneController'] = function (Container $container) {
-    return new Oacc\Controller\API\V1\DroneController($container->get('em'), $container->get('csrf'));
+    return new Oacc\Controller\API\V1\DroneController($container->get('em'), $container->get('drone-utilities'));
 };
 
 $container['Oacc\Controller\API\V1\SquadronController'] = function (Container $container) {
-    return new Oacc\Controller\API\V1\SquadronController($container->get('em'), $container->get('csrf'));
+    return new Oacc\Controller\API\V1\SquadronController($container->get('em'), $container->get('drone-utilities'));
 };
 
 $container['em'] = function (Container $container) {

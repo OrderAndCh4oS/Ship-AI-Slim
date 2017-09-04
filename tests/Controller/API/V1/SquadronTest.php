@@ -87,6 +87,37 @@ class SquadronTest extends BaseAPITest
         $this->squadronDataAsserts($json);
     }
 
+    public function testPUTDrones()
+    {
+        $data = [
+            'drones' => [
+                [
+                    'id' => 1,
+                    'thruster_power' => 24,
+                    'turning_speed' => 24,
+                ],
+                [
+                    'id' => 2,
+                    'thruster_power' => 24,
+                    'turning_speed' => 24,
+                ],
+            ],
+        ];
+
+        /** @var Response $response */
+        $response = $this->client->put(
+            '/api/v1/squadrons/1/drones',
+            [
+                'body' => json_encode($data),
+            ]
+        );
+
+        $json = json_decode($response->getBody());
+        $this->successStatusAsserts($response, $json);
+
+        $this->squadronDataAsserts($json);
+    }
+
     public function testDELETE()
     {
         $response = $this->postSquadron();

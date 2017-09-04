@@ -11,6 +11,7 @@ namespace Oacc\Controller\API\V1;
 use Doctrine\ORM\EntityManager;
 use Oacc\Entity\Drone;
 use Oacc\Entity\Squadron;
+use Oacc\Services\DroneUtilities;
 use Slim\Csrf\Guard;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -23,20 +24,20 @@ class SquadronController extends BaseAPIController
      */
     private $em;
     /**
-     * @var Guard
+     * @var DroneUtilities
      */
-    private $csrf;
+    private $droneUtilities;
 
     /**
      * SquadronController constructor.
      *
      * @param EntityManager $em
-     * @param Guard $csrf
+     * @param DroneUtilities $droneUtilities
      */
-    public function __construct(EntityManager $em, Guard $csrf)
+    public function __construct(EntityManager $em, DroneUtilities $droneUtilities)
     {
         $this->em = $em;
-        $this->csrf = $csrf;
+        $this->droneUtilities = $droneUtilities;
     }
 
     /**
@@ -191,6 +192,34 @@ class SquadronController extends BaseAPIController
         if (array_key_exists('cash', $post)) {
             $cash = $squadron->getCash() + $post['cash'];
             $squadron->setCash($cash);
+        }
+        $this->em->persist($squadron);
+        $this->em->flush();
+        $data = $this->getData($squadron);
+        $messages = ['message' => 'Squadron has been updated'];
+
+        return $this->setSuccessJson($response, $messages, $data);
+    }
+
+    public function putDronesAction(Request $request, Response $response, $args)
+    {
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $args['id'];
+        $squadron = $this->em->getRepository('Oacc\Entity\Squadron')->find($id);
+        if (!$squadron) {
+            $errors = ['message' => "Squadron not found"];
+
+            return $this->setErrorJson($response, $errors, 404);
+        }
+
+        /** @var Drone $droneRepository */
+        $droneRepository = $this->em->getRepository('Oacc\Entity\Drone');
+
+        $post = json_decode($request->getBody(), true);
+        if (!array_key_exists('drones', $post)) {
+            foreach($post->drones as $drone) {
+                $droneRepository->find($post['id']);
+            }
         }
         $this->em->persist($squadron);
         $this->em->flush();

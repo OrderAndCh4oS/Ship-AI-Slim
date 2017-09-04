@@ -30,7 +30,7 @@ $app->group(
         $this->delete('/drones/{id}', 'Oacc\Controller\API\V1\DroneController:deleteAction');
         $this->get('/squadrons', 'Oacc\Controller\API\V1\SquadronController:getAllAction');
         $this->get('/squadrons/{id}', 'Oacc\Controller\API\V1\SquadronController:getAction');
-        $this->get('/squadrons/{id}/drones', 'Oacc\Controller\API\V1\SquadronController:getDronesAction');
+        $this->put('/squadrons/{id}/drones', 'Oacc\Controller\API\V1\SquadronController:putDronesAction');
         $this->post('/squadrons', 'Oacc\Controller\API\V1\SquadronController:postAction');
         $this->put('/squadrons/{id}', 'Oacc\Controller\API\V1\SquadronController:putAction');
         $this->delete('/squadrons/{id}', 'Oacc\Controller\API\V1\SquadronController:deleteAction');
