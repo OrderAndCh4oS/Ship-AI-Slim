@@ -2,7 +2,7 @@
 
 ## BASE REQUIREMENTS
 
-- [ ] Add way to spend cash to upgrade drones
+- [x] Add way to spend cash to upgrade drones
 - [ ] Add way to buy additional drones
 - [ ] Add way to rename drones
 - [ ] Get drones from API to populate the game

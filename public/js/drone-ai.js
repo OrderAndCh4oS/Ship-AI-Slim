@@ -1,5 +1,4 @@
 startGame = function (squadronIds) {
-
     var gameOver = false,
         canvas = document.getElementById('canvas'),
         context = canvas.getContext('2d'),
