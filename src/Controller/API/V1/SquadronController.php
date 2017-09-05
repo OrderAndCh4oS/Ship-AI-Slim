@@ -243,7 +243,6 @@ class SquadronController extends BaseAPIController
                 }
 
                 $this->em->persist($drone);
-                $this->droneUtilities->resetStatChangeCost();
             }
         }
         $this->em->persist($squadron);

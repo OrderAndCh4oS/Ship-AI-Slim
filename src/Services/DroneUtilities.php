@@ -53,6 +53,7 @@ class DroneUtilities
             $cash = $squadron->getCash() - $this->statChangeCost;
             $squadron->setCash($cash);
             $this->em->persist($squadron);
+            $this->resetStatChangeCost();
         } else {
             throw new \Exception("Not enough cash");
         }
@@ -82,7 +83,7 @@ class DroneUtilities
         return $this->statChangeCost;
     }
 
-    public function resetStatChangeCost()
+    private function resetStatChangeCost()
     {
         $this->statChangeCost = 0;
     }
