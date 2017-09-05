@@ -1,7 +1,6 @@
 class Errors {
 
     constructor() {
-        console.log("Errors");
         this.errors = {};
     }
 

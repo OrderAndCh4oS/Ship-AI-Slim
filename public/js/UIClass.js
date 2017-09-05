@@ -24,7 +24,7 @@ var UIClass = {
 
     drawBackground: function (context) {
         context.clearRect(0, 0, this.width, this.height);
-        context.fillStyle = '#000';
+        context.fillStyle = 'gold';
         context.fillRect(0, 0, this.width, this.height);
     },
 

@@ -41,4 +41,23 @@ class SquadronController
     public function manageSquadronAction(Request $request, Response $response, $args) {
         return $this->view->render($response, 'manage-squadrons.twig');
     }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function manageDronesAction(Request $request, Response $response, $args)
+    {
+        $squadron_id = $args['id'];
+
+        return $this->view->render(
+            $response,
+            'manage-drones.twig',
+            [
+                'squadron_id' => $squadron_id,
+            ]
+        );
+    }
 }

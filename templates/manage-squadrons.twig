@@ -6,7 +6,7 @@
 
 {% block content %}
     <section id="root">
-        <h1 class="title green">Manage Squadrons</h1>
+        <h1 class="title">Manage Squadrons</h1>
         <form method="post" action="{{ path_for('manage-squadron') }}"
               @submit.prevent="onSubmit"
               @keydown="form.errors.clear($event.target.name)">

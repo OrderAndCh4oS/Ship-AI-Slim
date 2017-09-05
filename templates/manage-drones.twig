@@ -5,16 +5,28 @@
 {% endblock %}
 
 {% block content %}
-    <section id="root"><h1 class="title green">Squadron name: {{ drones[0].squadron.name }}</h1>
-    <p class="small-title green">Cash: {{ drones[0].squadron.cash }}</p>
-    <p class="red">{{ message }}</p>
-        <drone-list :drones="drones"></drone-list>
-    <p>
-        <a href="{{ path_for('manage-squadron') }}">Back</a>
-    </p></section>
+    <section id="root">
+        <h2 class="title" v-text="squadron.name"></h2>
+        <p class="small-title">
+            Cash: <span v-text="squadron.cash"></span>
+        </p>
+        <p class="red">{{ message }}</p>
+        <form method="post" action="{{ path_for('manage-drones', {'id': squadron_id}) }}"
+              @submit.prevent="onSubmit"
+              @keydown="form.errors.clear($event.target.name)">
+            <drone-list :drones="squadron.drones" :form="form"></drone-list>
+            <p><input class="button" type="submit" value="Upgrade Drones"></p>
+        </form>
+        <p>
+            <a href="{{ path_for('manage-squadron') }}">Back</a>
+        </p>
+    </section>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    <script>
+        var squadronID = {{ squadron_id }};
+    </script>
     <script src="/app/errors.js"></script>
     <script src="/app/form.js"></script>
     <script src="/app/drone/drone-list.js"></script>

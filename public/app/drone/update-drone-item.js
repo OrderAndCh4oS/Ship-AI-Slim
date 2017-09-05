@@ -1,23 +1,37 @@
 Vue.component('update-drone-item', {
-    props: ['drone'],
+    props: ['drone', 'index'],
 
     template: `
         <tr>
             <td>
-                <input :form="'drone-' + drone.id" name="name" title="Name" :value="drone.name">
+                <input type="hidden" :name="formName('id')" :value="drone.id" v-model="drone.id">
+                <input name="formName('name')" title="Name" :value="drone.name" v-model="drone.name">
             </td>
             <td>
-                <input :form="'drone-' + drone.id" name="thruster_power" type="number" title="Thruster Power" :value="drone.thrusterPower" :min="drone.thrusterPower" max="100" step="1">
+                <input :name="formName('thruster_power')" 
+                       type="number" 
+                       title="Thruster Power" 
+                       :value="drone.thruster_power" 
+                       :min="drone.thruster_power" 
+                       max="100" 
+                       step="1"
+                        v-model="drone.thruster_power">
             </td>
             <td>
-                <input :form="'drone-' + drone.id" name="turning_speed" type="number" title="Turning Speed" :value="drone.turningSpeed" :min="drone.turningSpeed" max="100" step="1">
-            </td>
-            <td>
-                <form action="/manage-drones" method="post" id="'drone-' + drone.id">
-                    <input type="hidden" name="id" :value="drone.id">
-                    <input type="submit" name="submit" id="submit" value="Submit">
-                </form>
+                <input :name="formName('turning_speed')" 
+                       type="number" 
+                       title="Turning Speed" 
+                       :value="drone.turning_speed" 
+                       :min="drone.turning_speed" 
+                       max="100" 
+                       step="1"
+                       v-model="drone.turning_speed">
             </td>
         </tr>
-    `
+    `,
+    methods: {
+        formName(field) {
+            return 'drone[' + this.index + '][' + field + ']'
+        }
+    }
 });

@@ -1,7 +1,5 @@
 class Form {
     constructor(data) {
-        console.log("Form");
-
         this.originalData = data;
 
         for (let field in data) {

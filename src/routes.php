@@ -9,14 +9,14 @@ $app->get('/', 'Oacc\Controller\MenuController:indexAction')->setName('menu');
 
 $app->map(
     ['post', 'get'],
-    '/manage-squadron',
+    '/squadrons/manage',
     'Oacc\Controller\SquadronController:manageSquadronAction'
 )->setName('manage-squadron');
 
 $app->map(
     ['post', 'get'],
-    '/manage-drones/{id}',
-    'Oacc\Controller\DroneController:manageDronesAction'
+    '/squadrons/{id}/manage',
+    'Oacc\Controller\SquadronController:manageDronesAction'
 )->setName('manage-drones');
 
 $app->get('/drone-ai', 'Oacc\Controller\GameController:gameAction')->setName('drone-ai');

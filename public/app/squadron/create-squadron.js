@@ -3,15 +3,12 @@ new Vue({
 
     data: {
         form: new Form({
-            csrf_name: '',
-            csrf_value: '',
             name: ''
         }),
         squadrons: {}
     },
 
     mounted() {
-        console.log("mounted");
         axios.get('/api/v1/squadrons')
             .then(response => {
                 console.log(response);

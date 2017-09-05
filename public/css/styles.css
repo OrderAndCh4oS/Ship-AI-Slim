@@ -2,6 +2,7 @@
 
 html,
 body {
+    background-color: gold;
     margin: 0;
     font-family: 'Grafista-Regular', "Droid Sans Mono Dotted", monospace;
 }
@@ -12,7 +13,6 @@ canvas {
 
 body {
     padding: 0 0;
-    background-color: #000;
     text-align: center;
 }
 
@@ -29,20 +29,20 @@ li {
 a, a:visited {
     font-weight: bold;
     font-size: 50px;
-    color: #000;
+    color: gold;
     text-decoration: none;
-    background-color: #ff3243;
+    background-color: #000;
     padding: 20px;
     display: inline-block;
 }
 
 a:hover, a:active, a:focus {
-    background-color: #61ff83;
+    background-color: blue;
 }
 
 .title {
     font-size: 76px;
-    color: #ff3243;
+    color: #000;
     margin-bottom: 120px;
 }
 
@@ -52,30 +52,30 @@ a:hover, a:active, a:focus {
 
 .scores-title {
     font-size: 60px;
-    color: #61ff83;
+    color: #000;
 }
 
 .play-button,
 .play-button:visited {
-    background-color: #ff3243;
+    background-color: blue;
     font-size: 50px;
-    border: 1px solid #ff3243;
+    border: 1px solid blue;
 }
 
 .play-button:hover, .play-button:active, .play-button:focus {
-    color: #ff3243;
+    color: #000;
     background-color: transparent;
 }
 
 .manage-squadron-button,
 .manage-squadron-button:visited {
-    background-color: #61ff83;
-    border: 1px solid #61ff83;
+    background-color: black;
+    border: 1px solid black;
 }
 
 .manage-squadron-button:hover, .manage-squadron-button:active, .manage-squadron-button:focus {
     background-color: transparent;
-    color: #61ff83;
+    color: black;
 }
 
 .back-link, .restart-link {
@@ -86,11 +86,11 @@ a:hover, a:active, a:focus {
 }
 
 .restart-link, .restart-link:visited {
-    background-color: #61ff83;
+    background-color: blue;
 }
 
 .restart-link:hover, .restart-link:active, .restart-link:focus {
-    background-color: #ff3243;
+    background-color: #000;
 }
 
 .holder {
@@ -102,8 +102,8 @@ a:hover, a:active, a:focus {
 
 table {
     margin: 0 auto;
-    color: #61ff83;
-    border: 1px solid #61ff83;
+    color: black;
+    border: 1px solid black;
     border-collapse: collapse;
 }
 
@@ -112,7 +112,7 @@ th {
 }
 
 td {
-    border: 1px solid #61ff83;
+    border: 1px solid black;
     padding: 0;
 }
 
@@ -124,43 +124,43 @@ td input {
 input {
     box-sizing: border-box;
     background-color: transparent;
-    border: 1px solid #61ff83;
+    border: 1px solid black;
     padding: 8px;
-    color: #61ff83;
+    color: black;
 }
 
 input[type="submit"] {
-    background-color: #61ff83;
-    border: 1px solid #61ff83;
-    color: #000;
+    background-color: black;
+    border: 1px solid black;
+    color: gold;
 }
 
 input[type="submit"]:hover {
-    background-color: #ff3243;
-    border: 1px solid #ff3243;
+    background-color: blue;
+    border: 1px solid blue;
     cursor: pointer;
 }
 
 .red {
-    color: #ff3243;
+    color: red;
 }
 
 .pink {
-    color: #ff4fa9;
+    color: fuchsia;
 }
 
 .green {
-    color: #61ff83;
+    color: lawngreen;
 }
 
 .cyan {
-    color:  #6ddfff;
+    color: cyan;
 }
 
 .blue {
-    color: #4b6aff;
+    color: blue;
 }
 
 .yellow {
-    color: #ffe76a;
+    color: coral;
 }

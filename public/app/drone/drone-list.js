@@ -1,5 +1,5 @@
 Vue.component('drone-list', {
-    props: ['drones'],
+    props: ['drones', 'form'],
 
     template: `
         <table>
@@ -7,9 +7,10 @@ Vue.component('drone-list', {
                 <th>Name</th>
                 <th>Thruster Power</th>
                 <th>Turning Speed</th>
-                <th>Save</th>
             </tr>
-            <update-drone-item v-for="drone in drones" :drone="drone" :key="drone.id"></update-drone-item>
+            <template v-for="(drone, index) in form.drones">
+                <update-drone-item :drone="drone" :index="index"></update-drone-item>
+            </template>
         </table>
     `
 });

@@ -1,5 +1,5 @@
 var scoreClass = {
-    scores: {red: 0, green: 0, blue: 0, pink: 0, yellow: 0, cyan: 0},
+    scores: {blue: 0, red: 0, pink: 0, green: 0, orange: 0, cyan: 0},
     isDisplayed: false,
 
     create: function () {
@@ -8,23 +8,23 @@ var scoreClass = {
 
     incrementScore: function (colour) {
         switch (colour) {
-            case '#ff3243':
-                this.scores.red++;
-                break;
-            case '#ff4fa9':
-                this.scores.pink++;
-                break;
-            case '#61ff83':
-                this.scores.green++;
-                break;
-            case '#6ddfff':
-                this.scores.cyan++;
-                break;
-            case '#4b6aff':
+            case 'blue':
                 this.scores.blue++;
                 break;
-            case '#ffe76a':
-                this.scores.yellow++;
+            case 'red':
+                this.scores.red++;
+                break;
+            case 'fuschia':
+                this.scores.pink++;
+                break;
+            case 'lawngreen':
+                this.scores.green++;
+                break;
+            case 'coral':
+                this.scores.orange++;
+                break;
+            case 'cyan':
+                this.scores.cyan++;
                 break
         }
     },

@@ -1,4 +1,4 @@
-startGame = function (squadronOneId, squadronTwoId) {
+startGame = function (squadronIds) {
 
     var gameOver = false,
         canvas = document.getElementById('canvas'),
@@ -13,8 +13,10 @@ startGame = function (squadronOneId, squadronTwoId) {
         squadronCount = 0,
         updated = false;
 
-    getSquadron(squadronOneId);
-    getSquadron(squadronTwoId);
+    for (var i = 0; i < squadronIds.length && i < 6; i++) {
+        console.log('in loop');
+        getSquadron(squadronIds[i]);
+    }
 
     update();
 
@@ -141,16 +143,16 @@ startGame = function (squadronOneId, squadronTwoId) {
     function setDroneColour(drone) {
         switch (squadronCount % 6) {
             case 0:
-                drone.colour = '#ff3243';
+                drone.colour = 'blue';
                 break;
             case 1:
-                drone.colour = '#61ff83';
+                drone.colour = 'red';
                 break;
             case 2:
-                drone.colour = '#ff4fa9';
+                drone.colour = 'fuschia';
                 break;
             case 3:
-                drone.colour = '#6ddfff';
+                drone.colour = 'lawngreen';
                 break;
             case 4:
                 drone.colour = '#ffe76a';
@@ -197,4 +199,4 @@ startGame = function (squadronOneId, squadronTwoId) {
     }
 };
 
-startGame(5, 6);
+startGame([15, 16, 18, 20, 22, 26]);

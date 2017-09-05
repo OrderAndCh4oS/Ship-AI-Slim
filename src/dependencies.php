@@ -50,10 +50,6 @@ $container['Oacc\Controller\MenuController'] = function (Container $container) {
     return new Oacc\Controller\MenuController($container->get('view'), $container->get('csrf'), $container->get('em'));
 };
 
-$container['Oacc\Controller\DroneController'] = function (Container $container) {
-    return new Oacc\Controller\DroneController($container->get('view'), $container->get('csrf'), $container->get('em'));
-};
-
 $container['Oacc\Controller\SquadronController'] = function (Container $container) {
     return new Oacc\Controller\SquadronController($container->get('view'), $container->get('csrf'), $container->get('em'));
 };

@@ -5,7 +5,7 @@ Vue.component('squadron-item', {
                </p>`,
     computed: {
         url: function () {
-            return '/manage-squadrons/' + this.id
+            return '/squadrons/' + this.id + '/manage'
         }
     }
 });

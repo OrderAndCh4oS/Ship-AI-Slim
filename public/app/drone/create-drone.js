@@ -3,27 +3,28 @@ new Vue({
 
     data: {
         form: new Form({
-            csrf_name: '',
-            csrf_value: '',
-            name: ''
+            drones: []
         }),
-        drones: {}
+        squadron: {}
     },
 
     mounted() {
-        axios.get('/api/v1/squadrons/' + 14)
-            .then(response => {
-                console.log(response);
-                this.squadrons = response.data.data;
-            })
-            .catch(error => console.log(error))
+        if (squadronID) {
+            axios.get('/api/v1/squadrons/' + squadronID)
+                .then(response => {
+                    this.squadron = response.data.data;
+                    this.form.drones = this.squadron.drones;
+                })
+                .catch(error => console.log(error))
+        }
     },
 
     methods: {
         onSubmit() {
-            this.form.submit('post', '/api/v1/squadrons')
+            this.form.submit('put', '/api/v1/squadrons/' + squadronID + '/drones')
                 .then(data => {
-                    this.squadrons.push(data.data);
+                    this.squadron = data.data;
+                    this.form.drones = this.squadron.drones;
                 })
                 .catch(errors => console.log(errors));
         },
