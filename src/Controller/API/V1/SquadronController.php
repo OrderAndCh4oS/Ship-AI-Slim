@@ -228,10 +228,11 @@ class SquadronController extends BaseAPIController
                     return $this->setErrorJson($response, $errors, 404);
                 }
 
-                $stat = $this->droneUtilities->updateStat('thruster_power', $postedDrone, $drone->getThrusterPower());
-                $drone->setThrusterPower($stat);
-                $stat = $this->droneUtilities->updateStat('turning_speed', $postedDrone, $drone->getTurningSpeed());
-                $drone->setTurningSpeed($stat);
+                $thrusterPower = $this->droneUtilities->updateStat('thruster_power', $postedDrone, $drone->getThrusterPower());
+                $turningSpeed = $this->droneUtilities->updateStat('turning_speed', $postedDrone, $drone->getTurningSpeed());
+
+                $drone->setThrusterPower($thrusterPower);
+                $drone->setTurningSpeed($turningSpeed);
 
                 try {
                     $this->droneUtilities->spendCash($squadron);

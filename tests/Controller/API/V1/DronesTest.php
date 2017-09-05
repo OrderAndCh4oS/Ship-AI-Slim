@@ -88,8 +88,6 @@ class DronesTest extends BaseAPITest
     {
         $data = [
             'name' => 'Drone PUT Test',
-            'thruster_power' => 19,
-            'turning_speed' => 19,
             'kills' => 1,
         ];
 
@@ -104,29 +102,6 @@ class DronesTest extends BaseAPITest
 
         $json = json_decode($response->getBody());
         $this->errorStatusAsserts($response, $json, 404);
-
-    }
-
-    public function testPUTNotEnoughCash()
-    {
-        $data = [
-            'name' => 'Drone PUT Test',
-            'thruster_power' => 200,
-            'turning_speed' => 200,
-            'kills' => 1,
-        ];
-
-        /** @var Response $response */
-        $response = $this->client->put(
-            '/api/v1/drones/'.$this->drone_id,
-            [
-                'body' => json_encode($data),
-                'http_errors' => false,
-            ]
-        );
-
-        $json = json_decode($response->getBody());
-        $this->errorStatusAsserts($response, $json, 400);
 
     }
 

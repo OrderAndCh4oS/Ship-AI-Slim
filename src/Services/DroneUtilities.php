@@ -20,7 +20,7 @@ class DroneUtilities
     /**
      * @var int
      */
-    private $statChangeCost;
+    private $statChangeCost = 0;
 
     /**
      * DroneUtilities constructor.
@@ -59,14 +59,6 @@ class DroneUtilities
     }
 
     /**
-     * @return int
-     */
-    public function getStatChangeCost()
-    {
-        return $this->statChangeCost;
-    }
-
-    /**
      * @param $key
      * @param $post
      * @param $stat
@@ -74,11 +66,24 @@ class DroneUtilities
      */
     public function updateStat($key, $post, $stat)
     {
-        if (array_key_exists($key, $post)) {
+        if (array_key_exists($key, $post) && $post[$key] > $stat) {
             $this->updateStatChangeCost($post[$key], $stat);
             $stat = $post[$key];
         }
 
         return $stat;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatChangeCost()
+    {
+        return $this->statChangeCost;
+    }
+
+    public function resetStatChangeCost()
+    {
+        $this->statChangeCost = 0;
     }
 }
