@@ -220,6 +220,7 @@ class SquadronController extends BaseAPIController
 
         $post = json_decode($request->getBody(), true);
         if (array_key_exists('drones', $post)) {
+            $this->droneUtilities->resetStatChangeCost();
             foreach($post['drones'] as $postedDrone) {
                 $drone = $droneRepository->find($postedDrone['id']);
                 if (!$drone) {
