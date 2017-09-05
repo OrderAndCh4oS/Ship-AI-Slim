@@ -13,6 +13,8 @@ use TestUtilities\BaseAPITest;
 
 class DronesTest extends BaseAPITest
 {
+    private $drone_id = 2;
+
     public function testPOST()
     {
         $response = $this->postDrone();
@@ -44,7 +46,7 @@ class DronesTest extends BaseAPITest
     public function testGET()
     {
         /** @var Response $response */
-        $response = $this->client->get('/api/v1/drones/12');
+        $response = $this->client->get('/api/v1/drones/'.$this->drone_id);
         $json = json_decode($response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertObjectHasAttribute('status', $json);
@@ -71,7 +73,7 @@ class DronesTest extends BaseAPITest
 
         /** @var Response $response */
         $response = $this->client->put(
-            '/api/v1/drones/12',
+            '/api/v1/drones/'.$this->drone_id,
             [
                 'body' => json_encode($data),
             ]
@@ -116,7 +118,7 @@ class DronesTest extends BaseAPITest
 
         /** @var Response $response */
         $response = $this->client->put(
-            '/api/v1/drones/12',
+            '/api/v1/drones/'.$this->drone_id,
             [
                 'body' => json_encode($data),
                 'http_errors' => false,

@@ -13,6 +13,8 @@ use TestUtilities\BaseAPITest;
 
 class SquadronTest extends BaseAPITest
 {
+    private $squadron_id = 1;
+
     public function testPOST()
     {
         $response = $this->postSquadron();
@@ -52,7 +54,7 @@ class SquadronTest extends BaseAPITest
     public function testGETOne()
     {
         /** @var Response $response */
-        $response = $this->client->get('/api/v1/squadrons/1');
+        $response = $this->client->get('/api/v1/squadrons/'.$this->squadron_id);
         $json = json_decode($response->getBody());
         $this->successStatusAsserts($response, $json);
         $this->squadronDataAsserts($json);
@@ -75,7 +77,7 @@ class SquadronTest extends BaseAPITest
 
         /** @var Response $response */
         $response = $this->client->put(
-            '/api/v1/squadrons/1',
+            '/api/v1/squadrons/'.$this->squadron_id,
             [
                 'body' => json_encode($data),
             ]
@@ -92,12 +94,12 @@ class SquadronTest extends BaseAPITest
         $data = [
             'drones' => [
                 [
-                    'id' => 1,
+                    'id' => 4,
                     'thruster_power' => 24,
                     'turning_speed' => 24,
                 ],
                 [
-                    'id' => 2,
+                    'id' => 5,
                     'thruster_power' => 24,
                     'turning_speed' => 24,
                 ],
@@ -106,7 +108,7 @@ class SquadronTest extends BaseAPITest
 
         /** @var Response $response */
         $response = $this->client->put(
-            '/api/v1/squadrons/1/drones',
+            '/api/v1/squadrons/'.$this->squadron_id.'/drones',
             [
                 'body' => json_encode($data),
             ]

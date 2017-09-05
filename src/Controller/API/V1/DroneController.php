@@ -163,26 +163,13 @@ class DroneController extends BaseAPIController
             $drone->setName($post['name']);
         }
 
-        $stat = $this->updateStat('thruster_power', $post, $drone->getThrusterPower());
-        $drone->setThrusterPower($stat);
-
-        $stat = $this->updateStat('turning_speed', $post, $drone->getTurningSpeed());
-        $drone->setTurningSpeed($stat);
-
         if (array_key_exists('kills', $post)) {
             $kills = $drone->getKills() + $post['kills'];
             $drone->setKills($kills);
         }
 
         $squadron = $drone->getSquadron();
-
-        try {
-            $this->droneUtilities->spendCash($squadron);
-        } catch(\Exception $e) {
-            $errors[] = ['message' => $e->getMessage()];
-
-            return $this->setErrorJson($response, $errors, 400);
-        }
+        // ToDo: Grant cash to squadron per kill
 
         $this->em->persist($drone);
         $this->em->flush();
@@ -211,21 +198,5 @@ class DroneController extends BaseAPIController
         $messages = ['message' => 'Drone has been deleted'];
 
         return $this->setSuccessJson($response, $messages);
-    }
-
-    /**
-     * @param $key
-     * @param $post
-     * @param $stat
-     * @return mixed
-     */
-    private function updateStat($key, $post, $stat)
-    {
-        if (array_key_exists($key, $post)) {
-            $this->droneUtilities->updateStatChangeCost($post[$key], $stat);
-            $stat = $post[$key];
-        }
-
-        return $stat;
     }
 }

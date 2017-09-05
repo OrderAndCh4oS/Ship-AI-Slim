@@ -11,6 +11,8 @@ namespace Oacc\Controller\API\V1;
 use Doctrine\ORM\EntityManager;
 use Oacc\Entity\Drone;
 use Oacc\Entity\Squadron;
+use Oacc\Repository\DroneRepository;
+use Oacc\Repository\SquadronRepository;
 use Oacc\Services\DroneUtilities;
 use Slim\Csrf\Guard;
 use Slim\Http\Request;
@@ -103,7 +105,7 @@ class SquadronController extends BaseAPIController
         return [
             'id' => (int)$squadron->getId(),
             'name' => $squadron->getName(),
-            'cash' => $squadron->getName(),
+            'cash' => $squadron->getCash(),
             'drones' => $drones,
         ];
     }
@@ -205,6 +207,7 @@ class SquadronController extends BaseAPIController
     {
         $response = $response->withHeader('Content-type', 'application/json');
         $id = $args['id'];
+        /** @var Squadron $squadron */
         $squadron = $this->em->getRepository('Oacc\Entity\Squadron')->find($id);
         if (!$squadron) {
             $errors = ['message' => "Squadron not found"];
@@ -212,13 +215,33 @@ class SquadronController extends BaseAPIController
             return $this->setErrorJson($response, $errors, 404);
         }
 
-        /** @var Drone $droneRepository */
+        /** @var DroneRepository $droneRepository */
         $droneRepository = $this->em->getRepository('Oacc\Entity\Drone');
 
         $post = json_decode($request->getBody(), true);
-        if (!array_key_exists('drones', $post)) {
-            foreach($post->drones as $drone) {
-                $droneRepository->find($post['id']);
+        if (array_key_exists('drones', $post)) {
+            foreach($post['drones'] as $postedDrone) {
+                $drone = $droneRepository->find($postedDrone['id']);
+                if (!$drone) {
+                    $errors = ['message' => "One of the drones could not be found"];
+
+                    return $this->setErrorJson($response, $errors, 404);
+                }
+
+                $stat = $this->droneUtilities->updateStat('thruster_power', $postedDrone, $drone->getThrusterPower());
+                $drone->setThrusterPower($stat);
+                $stat = $this->droneUtilities->updateStat('turning_speed', $postedDrone, $drone->getTurningSpeed());
+                $drone->setTurningSpeed($stat);
+
+                try {
+                    $this->droneUtilities->spendCash($squadron);
+                } catch(\Exception $e) {
+                    $errors[] = ['message' => $e->getMessage()];
+
+                    return $this->setErrorJson($response, $errors, 400);
+                }
+
+                $this->em->persist($drone);
             }
         }
         $this->em->persist($squadron);

@@ -65,4 +65,20 @@ class DroneUtilities
     {
         return $this->statChangeCost;
     }
+
+    /**
+     * @param $key
+     * @param $post
+     * @param $stat
+     * @return mixed
+     */
+    public function updateStat($key, $post, $stat)
+    {
+        if (array_key_exists($key, $post)) {
+            $this->updateStatChangeCost($post[$key], $stat);
+            $stat = $post[$key];
+        }
+
+        return $stat;
+    }
 }
