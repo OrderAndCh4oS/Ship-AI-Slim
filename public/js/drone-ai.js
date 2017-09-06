@@ -197,5 +197,3 @@ startGame = function (squadronIds) {
         }
     }
 };
-
-startGame([15, 16, 18, 20, 22, 26]);

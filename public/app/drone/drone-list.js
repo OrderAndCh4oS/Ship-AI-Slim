@@ -8,8 +8,8 @@ Vue.component('drone-list', {
                 <th>Thruster Power</th>
                 <th>Turning Speed</th>
             </tr>
-            <template v-for="(drone, index) in form.drones">
-                <update-drone-item :drone="drone" :index="index"></update-drone-item>
+            <template v-for="drone in form.drones">
+                <update-drone-item :drone="drone"></update-drone-item>
             </template>
         </table>
     `

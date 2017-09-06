@@ -1,5 +1,5 @@
 Vue.component('update-drone-item', {
-    props: ['drone', 'index'],
+    props: ['drone'],
 
     template: `
         <tr>
@@ -15,7 +15,7 @@ Vue.component('update-drone-item', {
                        :min="drone.thruster_power" 
                        max="100" 
                        step="1"
-                        v-model="drone.thruster_power">
+                       v-model="drone.thruster_power">
             </td>
             <td>
                 <input :name="formName('turning_speed')" 
