@@ -15,7 +15,7 @@ new Vue({
                     this.squadron = response.data.data;
                     this.form.drones = this.squadron.drones;
                 })
-                .catch(error => console.log(error))
+                .catch(error => console.log(error));
         }
     },
 
@@ -25,8 +25,13 @@ new Vue({
                 .then(data => {
                     this.squadron = data.data;
                     this.form.drones = this.squadron.drones;
+                    this.form.messages = data.messages;
                 })
                 .catch(errors => console.log(errors));
         },
+        enter() {
+            console.log('fired');
+            setTimeout(() => this.form.messages = [], 3000)
+        }
     },
 });

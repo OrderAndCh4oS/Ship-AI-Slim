@@ -164,3 +164,10 @@ input[type="submit"]:hover {
 .yellow {
     color: coral;
 }
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 300ms ease-out;
+}
+.fade-enter, .fade-leave-to {
+    opacity: 0
+}

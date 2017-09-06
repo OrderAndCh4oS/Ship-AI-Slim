@@ -7,9 +7,12 @@
 {% block content %}
     <section id="root">
         <h2 class="title" v-text="squadron.name"></h2>
-        <p class="small-title">
-            Cash: <span v-text="squadron.cash"></span>
-        </p>
+        <p class="small-title">Cash: <span v-text="squadron.cash"></span></p>
+        <transition name="fade" v-on:enter="enter">
+            <template v-show="form.messages.length > 0">
+                <p v-for="message in form.messages" v-text="message"></p>
+            </template>
+        </transition>
         <p class="red">{{ message }}</p>
         <form method="post" action="{{ path_for('manage-drones', {'id': squadron_id}) }}"
               @submit.prevent="onSubmit"

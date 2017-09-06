@@ -5,7 +5,7 @@ class Form {
         for (let field in data) {
             this[field] = data[field];
         }
-
+        this.messages = [];
         this.errors = new Errors()
     }
 
