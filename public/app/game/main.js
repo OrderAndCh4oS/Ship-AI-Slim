@@ -8,7 +8,7 @@ new Vue({
     mounted() {
         for(let i = 0; i < this.numberOfPlayers; i++) {
             this.players.push({
-                squadron: {},
+                squadron: '',
                 id: 0
             })
         }

@@ -7,7 +7,7 @@
 {% block content %}
     <div id="root">
         <input type="number" class="number-of-players" v-model="numberOfPlayers">
-        <team-select v-for="player in players" :key="player.id"></team-select>
+        <squadron-select v-for="player in players" :key="player.id" :player="player"></squadron-select>
         <canvas id="canvas"></canvas>
     </div>
 {% endblock %}
@@ -21,6 +21,6 @@
     <script src="js/drone-ai.js"></script>
     <script src="app/errors.js"></script>
     <script src="app/form.js"></script>
-    <script src="app/game/main.js"></script>
     <script src="app/game/squadron-select.js"></script>
+    <script src="app/game/main.js"></script>
 {% endblock %}
