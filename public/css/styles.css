@@ -26,7 +26,11 @@ li {
     font-size: 36px;
 }
 
-a, a:visited {
+button {
+    cursor: pointer;
+}
+
+a, a:visited, button {
     font-weight: bold;
     font-size: 50px;
     color: gold;
@@ -163,6 +167,26 @@ input[type="submit"]:hover {
 
 .yellow {
     color: coral;
+}
+
+.select-squadrons-menu {
+    padding-top: 20%;
+}
+
+.squadron-select button {
+    background-color: black;
+    border: none;
+    color: gold;
+    font-size: 24px;
+    padding: 8px 20px 14px;
+}
+
+.squadron-select button:hover {
+    background-color: blue;
+}
+
+.select-squadrons-menu .play-button {
+    margin-top: 30px;
 }
 
 .fade-enter-active, .fade-leave-active {

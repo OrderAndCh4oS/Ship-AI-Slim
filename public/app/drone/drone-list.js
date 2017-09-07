@@ -7,6 +7,7 @@ Vue.component('drone-list', {
                 <th>Name</th>
                 <th>Thruster Power</th>
                 <th>Turning Speed</th>
+                <th>Kills</th>
             </tr>
             <template v-for="drone in form.drones">
                 <update-drone-item :drone="drone"></update-drone-item>

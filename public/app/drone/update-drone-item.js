@@ -27,6 +27,9 @@ Vue.component('update-drone-item', {
                        step="1"
                        v-model="drone.turning_speed">
             </td>
+            <td>
+                {{drone.kills}}
+            </td>
         </tr>
     `,
     methods: {

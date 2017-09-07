@@ -6,14 +6,22 @@
 
 {% block content %}
     <div id="root">
-        <input type="number" class="number-of-players" v-model="numberOfPlayers">
-        <squadron-select
-                v-for="player in players"
-                :key="player.id"
-                :player="player"
-                @next="i => nextSquadron(i)"
-                @prev="i => prevSquadron(i)"
-        ></squadron-select>
+        <div v-if="showMenu" class="select-squadrons-menu">
+            <input type="number" class="player-count" v-model="playerCount" @change="updatePlayerCount" min="2" max="6">
+            <squadron-select
+                    v-for="(player, index) in players"
+                    :key="index"
+                    :player="player"
+                    @next="x => nextSquadron(x)"
+                    @prev="x => prevSquadron(x)"
+            ></squadron-select>
+            <p>
+                <button @click="play" class="play-button">Play</button>
+            </p>
+            <p>
+                <a href="{{ path_for('menu') }}">Back</a>
+            </p>
+        </div>
         <canvas id="canvas"></canvas>
     </div>
 {% endblock %}
