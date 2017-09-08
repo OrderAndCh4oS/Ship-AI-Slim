@@ -5,7 +5,7 @@
 - [x] Add way to spend cash to upgrade drones
 - [ ] Add way to buy additional drones
 - [ ] Add way to rename drones
-- [ ] Get drones from API to populate the game
+- [x] Get drones from API to populate the game
 - [ ] Update drone data based on game result
 - [ ] Update squadron cash based on game result
 - [ ] Track rounds played and rounds won by each squadron
