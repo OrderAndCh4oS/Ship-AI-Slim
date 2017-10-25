@@ -1,5 +1,12 @@
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
+# Getting Started
+`composer install`
+
+Add database details to `src/settings.php`
+
+Generate database `doctrine orm:schema-tool:create`
+
 # TODO
 
 ## BASE REQUIREMENTS

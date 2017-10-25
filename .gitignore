@@ -1,5 +1,6 @@
 /vendor/
 /logs/*
+.idea
 !/logs/README.md
 /cache/
 ### JetBrains template
