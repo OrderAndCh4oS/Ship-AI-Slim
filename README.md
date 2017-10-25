@@ -5,7 +5,7 @@
 
 Add database details to `src/settings.php`
 
-`doctrine orm:schema-tool:create`
+Generate database `doctrine orm:schema-tool:create`
 
 # TODO
 
